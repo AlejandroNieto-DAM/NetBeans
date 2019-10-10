@@ -2,19 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/Users/alejandronieto/NetBeansProjects/JavaApplication10/src/ConnectToBD.java</file>
-            <file>file:/Users/alejandronieto/NetBeansProjects/JavaApplication10/src/Message.java</file>
-            <file>file:/Users/alejandronieto/NetBeansProjects/JavaApplication10/src/Usuario_Model.java</file>
-            <file>file:/Users/alejandronieto/NetBeansProjects/JavaApplication10/src/CristoMessenger.java</file>
-            <file>file:/Users/alejandronieto/NetBeansProjects/JavaApplication10/src/Usuario.java</file>
-            <file>file:/Users/alejandronieto/NetBeansProjects/JavaApplication10/src/Amigo_Model.java</file>
-            <file>file:/Users/alejandronieto/NetBeansProjects/JavaApplication10/src/Amigo.java</file>
-            <file>file:/Users/alejandronieto/NetBeansProjects/JavaApplication10/src/Amigo_Controller.java</file>
-            <file>file:/Users/alejandronieto/NetBeansProjects/JavaApplication10/src/Message_Controller.java</file>
-            <file>file:/Users/alejandronieto/NetBeansProjects/JavaApplication10/src/Usuario_Controller.java</file>
-            <file>file:/Users/alejandronieto/NetBeansProjects/JavaApplication10/src/Message_Model.java</file>
-            <file>file:/Users/alejandronieto/NetBeansProjects/JavaApplication10/src/CristoMessengerLogin.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
