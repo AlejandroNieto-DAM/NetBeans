@@ -1,5 +1,6 @@
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -36,8 +37,10 @@ public class Alumno_Model extends ConectorBD {
     }
     
     public void viewTable(Connection con, String dbName, String query, ArrayList<Alumno> alumnos) throws SQLException {
+        
+        Statement stmt = con.createStatement();
 
-        try (Statement stmt = con.createStatement()) {
+        try {
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
 
@@ -55,7 +58,14 @@ public class Alumno_Model extends ConectorBD {
             }
         } catch (SQLException e ) {
             System.out.println(e);
+            
+        } finally {
+            
+            if(stmt != null) { stmt.close(); }
+            
         }
+        
+        
     } 
 
     public void getAlumnos(ArrayList<Alumno> alAlumnos){
@@ -68,6 +78,28 @@ public class Alumno_Model extends ConectorBD {
             Logger.getLogger(Alumno_Model.class.getName()).log(Level.SEVERE, null, ex);
         } 
         
-    } 
+    }
+    
+    public void setAlumno(){
+        
+        try{
+         
+          String query = " insert into alumnos (DNI, nom_alum)"
+            + " values (?, ?)";
+
+          PreparedStatement preparedStmt = this.getConnector().prepareStatement(query);
+          preparedStmt.setString (1, "123456789");
+          preparedStmt.setString (2, "Carlos Artista");
+            
+          preparedStmt.execute();
+
+          this.getConnector().close();
+        }
+        catch (Exception e)
+        {
+          System.err.println("Got an exception!");
+          System.err.println(e.getMessage());
+        }
+    }
    
 }

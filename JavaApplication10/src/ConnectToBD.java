@@ -29,7 +29,7 @@ public class ConnectToBD {
         conector = "jdbc";
         port = "3306";
         ip = "localhost";
-        dbName = "insti";
+        dbName = "messenger";
         database = "mysql";
         user = "root";
         passwd = "cristorey";
@@ -109,6 +109,7 @@ public class ConnectToBD {
         } else if (this.getDataBase().equals("derby")) {
             conn = DriverManager.getConnection("jdbc:" + this.getDataBase() + ":" + this.getDBName() + ";create=true",connectionProps);
         }
+        
         System.out.println("Connected to database");
         return conn;
     }

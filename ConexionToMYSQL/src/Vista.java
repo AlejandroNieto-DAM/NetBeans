@@ -36,15 +36,20 @@ public class Vista {
         
     }
     
+    public void setAlumno(){
+        a.setAlumno();
+    }
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args){
         
-        Vista a = new Vista();
+        Vista myvista = new Vista();
         
-        a.getAlumnos();
-        a.printAlumnos();
+        myvista.setAlumno();
+        myvista.getAlumnos();
+        myvista.printAlumnos();
         
     }
     

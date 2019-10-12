@@ -16,14 +16,14 @@ import java.util.Properties;
  */
 public class ConectorBD {
  
-    private String conector;
-    private String port;
-    private String ip;
-    private String dbName;
-    private String database;
+    protected String conector;
+    protected String port;
+    protected String ip;
+    protected String dbName;
+    protected String database;
     
-    private String user;
-    private String passwd;
+    protected String user;
+    protected String passwd;
     
     ConectorBD(){
         conector = "jdbc";

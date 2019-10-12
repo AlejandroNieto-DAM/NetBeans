@@ -20,8 +20,8 @@ public class Usuario_Controller {
      }
        
     
-    public void getUsuarios(ArrayList<Usuario> usuarios){
-        a.getUsuarios(usuarios);
+    public void getUsuariosLoginPasswd(ArrayList<Usuario> usuarios){
+        a.getUsuariosLoginPasswd(usuarios);
     }
     
 }

@@ -41,9 +41,9 @@ public class Usuario_Model extends ConnectToBD{
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
 
-                String login = rs.getString("login");
-                String passwd = rs.getString("nom_usuario");
-                String nombre = rs.getString("nombre");
+                String login = rs.getString("id_user");
+                String passwd = rs.getString("password");
+                String nombre = rs.getString("name");
            
 
                 Usuario auxiliar = new Usuario();
@@ -61,9 +61,9 @@ public class Usuario_Model extends ConnectToBD{
         }
     } 
 
-    public void getUsuarios(ArrayList<Usuario> usuarios){
+    public void getUsuariosLoginPasswd(ArrayList<Usuario> usuarios){
         
-        this.setQuery( "select login, nom_usuario, nombre " + "from " + this.getDBName() + ".usuarios"); 
+        this.setQuery( "select id_user, name, password " + "from " + this.getDBName() + ".user"); 
         
         try {
             this.viewTable(this.getConnector(), this.getDBName(), this.getQuery(), usuarios);

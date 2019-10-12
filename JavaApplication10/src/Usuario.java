@@ -81,7 +81,9 @@ public class Usuario {
                             "\nNombre --> " + this.getNombreUsuario() + 
                             "\nPrimer Apellido --> " + this.getApellido1() + 
                             "\nSegundo Apellido --> " + this.getApellido2() + 
-                            "\nEstado --> " + this.getEstadoUsuario());
+                            "\nEstado --> " + this.getEstadoUsuario() + 
+                            "\nPasswd --> " + this.getPasswd());
+                            
         
     }
     

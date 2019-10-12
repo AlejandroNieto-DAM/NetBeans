@@ -24,5 +24,9 @@ public class Alumnos_Controller {
         a.getAlumnos(alumnos);
     }
     
+    public void setAlumno(){
+        a.setAlumno();
+    }
+    
     
 }

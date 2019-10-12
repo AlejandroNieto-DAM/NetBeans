@@ -18,11 +18,9 @@ public class Amigo_Controller {
      Amigo_Controller(){
          a = new Amigo_Model();
      }
-       
-    
+     
     public void getAmigos(ArrayList<Amigo> amigos){
         a.getUsuarios(amigos);
     }
-    
     
 }
