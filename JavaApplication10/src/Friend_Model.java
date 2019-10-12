@@ -41,8 +41,8 @@ public class Friend_Model extends ConnectToBD{
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
 
-                String login = rs.getString("login_orig");
-                String login2 = rs.getString("login_des");
+                String login = rs.getString("id_user_orig");
+                String login2 = rs.getString("id_user_dest");
                 int request = rs.getInt("accept_request");
            
 
@@ -51,19 +51,27 @@ public class Friend_Model extends ConnectToBD{
                 auxiliar.setLogin_orig(login);
                 auxiliar.setLogin_des(login2);
                 auxiliar.setAccept_request(request);
+                
+                System.out.println(login);
 
                 amigos.add(auxiliar);
+                
+                
 
 
             }
         } catch (SQLException e ) {
-            System.out.println(e);
+            
+           CristoMessenger.returnException(e.toString());
+           
         }
     } 
 
     public void getFriendsOf(ArrayList<Friend> amigos, String id_user){
         
-        this.setQuery( "select login_orig, login_des " + "from " + this.getDBName() + ".friend where id_user_orig = " + id_user + " or id_user_dest = " + id_user); 
+        CristoMessenger.returnException("Debug: getFriendsOf");
+        
+        this.setQuery( "select id_user_orig, id_user_dest, accept_request " + "from " + this.getDBName() + ".friend where id_user_orig = '" + id_user + "' or id_user_dest = '" + id_user + "'"); 
         
         try {
             this.viewTable(this.getConnector(), this.getDBName(), this.getQuery(), amigos);

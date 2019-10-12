@@ -55,6 +55,7 @@ public class CristoMessenger extends javax.swing.JFrame{
         
         Friend_Controller myController = new Friend_Controller();
         myController.getFriendsOf(friends, actualUser);
+        System.out.println("friends size: " + friends.size());
         
         for(int i = 0; i < friends.size(); i++){
             if(friends.get(i).getLogin_orig().equals(actualUser)){

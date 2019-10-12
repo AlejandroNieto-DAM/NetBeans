@@ -114,10 +114,7 @@ public class CristoMessengerLogin extends javax.swing.JFrame {
         login = jTextField1.getText();
         
         User_Controller a = new User_Controller();
-        a.getUsuariosLoginPasswd(usuarios);
-        
-        System.out.println("uyeeeye");
-        
+        a.getUsuariosLoginPasswd(usuarios);        
         
         Boolean existe = false;
         String id_user = "";
@@ -139,7 +136,9 @@ public class CristoMessengerLogin extends javax.swing.JFrame {
             this.setVisible(false);
             CristoMessenger myCristoMessenger = new CristoMessenger();
             myCristoMessenger.setActualUser(login);
+            System.out.println("yeyeye");
             myCristoMessenger.getFriendsOf();
+            System.out.println("salida");
             myCristoMessenger.setVisible(true);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
