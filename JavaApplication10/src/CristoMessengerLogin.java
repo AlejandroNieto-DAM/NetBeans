@@ -116,6 +116,8 @@ public class CristoMessengerLogin extends javax.swing.JFrame {
         User_Controller a = new User_Controller();
         a.getUsuariosLoginPasswd(usuarios);
         
+        System.out.println("uyeeeye");
+        
         
         Boolean existe = false;
         String id_user = "";
