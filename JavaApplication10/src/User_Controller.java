@@ -11,16 +11,16 @@ import java.util.ArrayList;
  *
  * @author alejandronieto
  */
-public class Usuario_Controller {
+public class User_Controller {
     
-    Usuario_Model a;
+    User_Model a;
      
-     Usuario_Controller(){
-         a = new Usuario_Model();
+     User_Controller(){
+         a = new User_Model();
      }
        
     
-    public void getUsuariosLoginPasswd(ArrayList<Usuario> usuarios){
+    public void getUsuariosLoginPasswd(ArrayList<User> usuarios){
         a.getUsuariosLoginPasswd(usuarios);
     }
     

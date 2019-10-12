@@ -11,13 +11,13 @@ import java.util.ArrayList;
  *
  * @author alejandronieto
  */
-public class Amigo {
+public class Friend {
     
     private String login_orig;
     private String login_des;
     private Boolean accept_request;
     
-    Amigo(){
+    Friend(){
         
         login_orig = "";
         login_des = "";
@@ -33,8 +33,12 @@ public class Amigo {
         this.login_des = login_des;
     }
 
-    public void setAccept_request(Boolean accept_request) {
-        this.accept_request = accept_request;
+    public void setAccept_request(int a) {
+        if(a == 1){
+            this.accept_request = true;
+        } else if(a == 0){
+            this.accept_request = false;
+        }
     }
 
     public String getLogin_orig() {

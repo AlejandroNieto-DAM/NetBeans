@@ -8,7 +8,7 @@
  *
  * @author alejandronieto
  */
-public class Usuario {
+public class User {
     
     private String login;
     private String nombreUsuario;
@@ -18,7 +18,7 @@ public class Usuario {
     private String estado;
     
     
-    Usuario(){
+    User(){
         login = "";
         nombreUsuario = "";
         apellido1 = "";

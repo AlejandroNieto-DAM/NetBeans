@@ -17,11 +17,11 @@ import java.util.logging.Logger;
  *
  * @author alejandronieto
  */
-public class Usuario_Model extends ConnectToBD{
+public class User_Model extends ConnectToBD{
     
     private String query;
      
-    Usuario_Model(){
+    User_Model(){
         
         super();
        
@@ -35,7 +35,7 @@ public class Usuario_Model extends ConnectToBD{
         return this.query;
     }
     
-    public void viewTable(Connection con, String dbName, String query, ArrayList<Usuario> usuarios) throws SQLException {
+    public void viewTable(Connection con, String dbName, String query, ArrayList<User> usuarios) throws SQLException {
 
         try (Statement stmt = con.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
@@ -46,7 +46,7 @@ public class Usuario_Model extends ConnectToBD{
                 String nombre = rs.getString("name");
            
 
-                Usuario auxiliar = new Usuario();
+                User auxiliar = new User();
 
                 auxiliar.setLogin(login);
                 auxiliar.setNombreUsuario(nombre);
@@ -61,14 +61,14 @@ public class Usuario_Model extends ConnectToBD{
         }
     } 
 
-    public void getUsuariosLoginPasswd(ArrayList<Usuario> usuarios){
+    public void getUsuariosLoginPasswd(ArrayList<User> usuarios){
         
         this.setQuery( "select id_user, name, password " + "from " + this.getDBName() + ".user"); 
         
         try {
             this.viewTable(this.getConnector(), this.getDBName(), this.getQuery(), usuarios);
         } catch (SQLException ex) {
-            Logger.getLogger(Usuario_Model.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(User_Model.class.getName()).log(Level.SEVERE, null, ex);
         } 
         
     } 

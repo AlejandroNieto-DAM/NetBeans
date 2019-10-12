@@ -17,11 +17,11 @@ import java.util.logging.Logger;
  *
  * @author alejandronieto
  */
-public class Amigo_Model extends ConnectToBD{
+public class Friend_Model extends ConnectToBD{
     
     private String query;
      
-    Amigo_Model(){
+    Friend_Model(){
         
         super();
        
@@ -35,7 +35,7 @@ public class Amigo_Model extends ConnectToBD{
         return this.query;
     }
     
-    public void viewTable(Connection con, String dbName, String query, ArrayList<Amigo> amigos) throws SQLException {
+    public void viewTable(Connection con, String dbName, String query, ArrayList<Friend> amigos) throws SQLException {
 
         try (Statement stmt = con.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
@@ -43,10 +43,10 @@ public class Amigo_Model extends ConnectToBD{
 
                 String login = rs.getString("login_orig");
                 String login2 = rs.getString("login_des");
-                Boolean request = rs.getBoolean("accept_request");
+                int request = rs.getInt("accept_request");
            
 
-                Amigo auxiliar = new Amigo();
+                Friend auxiliar = new Friend();
 
                 auxiliar.setLogin_orig(login);
                 auxiliar.setLogin_des(login2);
@@ -61,14 +61,14 @@ public class Amigo_Model extends ConnectToBD{
         }
     } 
 
-    public void getUsuarios(ArrayList<Amigo> amigos){
+    public void getFriendsOf(ArrayList<Friend> amigos, String id_user){
         
-        this.setQuery( "select login_orig, login_des, accept_request " + "from " + this.getDBName() + ".amigo"); 
+        this.setQuery( "select login_orig, login_des " + "from " + this.getDBName() + ".friend where id_user_orig = " + id_user + " or id_user_dest = " + id_user); 
         
         try {
             this.viewTable(this.getConnector(), this.getDBName(), this.getQuery(), amigos);
         } catch (SQLException ex) {
-            Logger.getLogger(Usuario_Model.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(User_Model.class.getName()).log(Level.SEVERE, null, ex);
         } 
         
     } 

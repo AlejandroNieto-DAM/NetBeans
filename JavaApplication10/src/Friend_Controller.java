@@ -11,16 +11,16 @@ import java.util.ArrayList;
  *
  * @author alejandronieto
  */
-public class Amigo_Controller {
+public class Friend_Controller {
     
-     Amigo_Model a;
+     Friend_Model a;
      
-     Amigo_Controller(){
-         a = new Amigo_Model();
+     Friend_Controller(){
+         a = new Friend_Model();
      }
      
-    public void getAmigos(ArrayList<Amigo> amigos){
-        a.getUsuarios(amigos);
+    public void getFriendsOf(ArrayList<Friend> amigos, String id_user){
+        a.getFriendsOf(amigos, id_user);
     }
     
 }
