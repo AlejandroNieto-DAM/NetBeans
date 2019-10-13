@@ -24,4 +24,8 @@ public class User_Controller {
         a.getUsuariosLoginPasswd(usuarios);
     }
     
+    public void insertUser(User user){
+        a.insertUser(user);
+    }
+    
 }

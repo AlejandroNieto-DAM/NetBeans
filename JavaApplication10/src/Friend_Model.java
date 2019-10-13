@@ -76,7 +76,7 @@ public class Friend_Model extends ConnectToBD{
         try {
             this.viewTable(this.getConnector(), this.getDBName(), this.getQuery(), amigos);
         } catch (SQLException ex) {
-            Logger.getLogger(User_Model.class.getName()).log(Level.SEVERE, null, ex);
+            CristoMessenger.returnException(ex.toString());
         } 
         
     } 

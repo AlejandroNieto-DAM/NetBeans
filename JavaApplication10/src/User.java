@@ -15,7 +15,7 @@ public class User {
     private String apellido1;
     private String apellido2;
     private String passwd;
-    private String estado;
+    private Boolean estado;
     
     
     User(){
@@ -24,7 +24,7 @@ public class User {
         apellido1 = "";
         apellido2 = "";
         passwd = "";
-        estado = "";
+        estado = false;
     }
 
     public String getLogin() {
@@ -47,7 +47,7 @@ public class User {
         return passwd;
     }
     
-    public String getEstadoUsuario(){
+    public Boolean getEstadoUsuario(){
         return estado;
     }
 
@@ -71,8 +71,12 @@ public class User {
         this.passwd = passwd;
     }
     
-    public void setEstadoUsuario(String estado){
-        this.estado = estado;
+    public void setEstadoUsuario(int estate){
+        if(estate == 1){
+            this.estado = true;
+        } else if(estate == 0){
+            this.estado = false;
+        }
     }
     
     public void printUsuario(){

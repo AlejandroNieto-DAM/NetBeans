@@ -90,7 +90,7 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="jCheckBox1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Remin me later"/>
+        <Property name="text" type="java.lang.String" value="Remind me later"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">

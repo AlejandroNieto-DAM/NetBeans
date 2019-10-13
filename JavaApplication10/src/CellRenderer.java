@@ -17,8 +17,9 @@ import javax.swing.JList;
  * @author alejandronieto
  */
 public class CellRenderer extends DefaultListCellRenderer {
-
+    
         ImageIcon imageIcon = new ImageIcon(new ImageIcon("logo.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+        
         @Override
         public Component getListCellRendererComponent(
                 JList list, Object value, int index,
@@ -26,6 +27,7 @@ public class CellRenderer extends DefaultListCellRenderer {
 
             JLabel label = (JLabel) super.getListCellRendererComponent(
                     list, value, index, isSelected, cellHasFocus);
+            
             label.setIcon(imageIcon);
             label.setHorizontalTextPosition(JLabel.RIGHT);
             

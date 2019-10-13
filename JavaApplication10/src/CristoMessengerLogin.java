@@ -22,6 +22,8 @@ public class CristoMessengerLogin extends javax.swing.JFrame {
     ArrayList<User> usuarios;
     ImageIcon imageIcon; 
     
+    CristoMessenger myCristoMessenger;
+    
 
    
     /**
@@ -34,6 +36,7 @@ public class CristoMessengerLogin extends javax.swing.JFrame {
         usuarios = new ArrayList();
         imageIcon = new ImageIcon(new ImageIcon("logo.png").getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_DEFAULT));
         jLabel1.setIcon(imageIcon);
+        myCristoMessenger = new CristoMessenger();
         
     }
     /**
@@ -63,7 +66,7 @@ public class CristoMessengerLogin extends javax.swing.JFrame {
             }
         });
 
-        jCheckBox1.setText("Remin me later");
+        jCheckBox1.setText("Remind me later");
 
         jPasswordField1.setText("jPasswordField1");
 
@@ -134,11 +137,9 @@ public class CristoMessengerLogin extends javax.swing.JFrame {
         if(existe == true){
             
             this.setVisible(false);
-            CristoMessenger myCristoMessenger = new CristoMessenger();
+            
             myCristoMessenger.setActualUser(login);
-            System.out.println("yeyeye");
             myCristoMessenger.getFriendsOf();
-            System.out.println("salida");
             myCristoMessenger.setVisible(true);
         }
     }//GEN-LAST:event_jButton2ActionPerformed

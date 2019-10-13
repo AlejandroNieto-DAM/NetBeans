@@ -1,5 +1,6 @@
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -71,5 +72,36 @@ public class User_Model extends ConnectToBD{
             Logger.getLogger(User_Model.class.getName()).log(Level.SEVERE, null, ex);
         } 
         
-    } 
+    }
+    
+    public void insertUser(User user){
+        
+        try{
+         
+          String query = " insert into user (id_user, name, password, surname1, surname2, photo, state)"
+            + " values (?, ?, ?, ?, ?, ?, ?)";
+
+          PreparedStatement preparedStmt = this.getConnector().prepareStatement(query);
+          preparedStmt.setString (1, user.getLogin());
+          preparedStmt.setString (2, user.getNombreUsuario());
+          preparedStmt.setString (3, user.getPasswd());
+          preparedStmt.setString (4, user.getApellido1());
+          preparedStmt.setString (5, user.getApellido2());
+          preparedStmt.setString (6, "eyeyey");
+          preparedStmt.setInt (7, 0);
+          
+         
+          
+            
+          preparedStmt.execute();
+
+          this.getConnector().close();
+          
+          CristoMessenger.returnException("Usuario introducido correctamente!!");
+        }
+        catch (Exception e){
+          CristoMessenger.returnException("Got an exception!");
+          CristoMessenger.returnException(e.getMessage());
+        }
+    }
 }
