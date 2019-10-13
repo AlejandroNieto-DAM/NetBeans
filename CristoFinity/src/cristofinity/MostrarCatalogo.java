@@ -59,7 +59,7 @@ public class MostrarCatalogo extends javax.swing.JFrame{
         
         
         jTextField1.setText(String.valueOf(lista.size()));
-         jList1.setCellRenderer(new CristoFinity());
+        jList1.setCellRenderer(new CristoFinity());
     }
     
     public String atributosMultimedia(Multimedia p){

@@ -52,7 +52,7 @@ public class Friend_Model extends ConnectToBD{
                 auxiliar.setLogin_des(login2);
                 auxiliar.setAccept_request(request);
                 
-                System.out.println(login);
+               
 
                 amigos.add(auxiliar);
                 
