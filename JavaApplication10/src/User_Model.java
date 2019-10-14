@@ -45,26 +45,31 @@ public class User_Model extends ConnectToBD{
                 String login = rs.getString("id_user");
                 String passwd = rs.getString("password");
                 String nombre = rs.getString("name");
-           
-
+                String surname1 = rs.getString("surname1");
+                String surname2 = rs.getString("surname2");
+                int stateInt = rs.getInt("state");
+                
                 User auxiliar = new User();
 
                 auxiliar.setLogin(login);
                 auxiliar.setNombreUsuario(nombre);
+                auxiliar.setApellido1(surname1);
+                auxiliar.setApellido2(surname2);
                 auxiliar.setPasswd(passwd);
+                auxiliar.setEstadoUsuario(stateInt);
 
                 usuarios.add(auxiliar);
 
 
             }
         } catch (SQLException e ) {
-            System.out.println(e);
+            CristoMessenger.returnException(e.toString());
         }
     } 
 
     public void getUsuariosLoginPasswd(ArrayList<User> usuarios){
         
-        this.setQuery( "select id_user, name, password " + "from " + this.getDBName() + ".user"); 
+        this.setQuery( "select id_user, name, password, surname1, surname2, state " + "from " + this.getDBName() + ".user"); 
         
         try {
             this.viewTable(this.getConnector(), this.getDBName(), this.getQuery(), usuarios);
@@ -103,5 +108,38 @@ public class User_Model extends ConnectToBD{
           CristoMessenger.returnException("Got an exception!");
           CristoMessenger.returnException(e.getMessage());
         }
+    }
+    
+    public void getUser(User auxiliar) throws SQLException{
+        
+        this.setQuery( "select * " + "from " + this.getDBName() + ".user where id_user = '" + auxiliar.getLogin() + "'"); 
+        
+        try (Statement stmt = this.getConnector().createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+
+                String passwd = rs.getString("password");
+                String nombre = rs.getString("name");
+                String surname1 = rs.getString("surname1");
+                String surname2 = rs.getString("surname2");
+                int stateInt = rs.getInt("state");
+                
+                
+
+                auxiliar.setNombreUsuario(nombre);
+                auxiliar.setApellido1(surname1);
+                auxiliar.setApellido2(surname2);
+                auxiliar.setPasswd(passwd);
+                auxiliar.setEstadoUsuario(stateInt);
+
+                
+
+
+            }
+        } catch (SQLException e ) {
+            CristoMessenger.returnException(e.toString());
+        }
+        
+         
     }
 }

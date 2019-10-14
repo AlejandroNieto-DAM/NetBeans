@@ -2,7 +2,10 @@
 
 
 import java.awt.Image;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 
@@ -25,6 +28,8 @@ public class CristoMessenger extends javax.swing.JFrame{
     String valor;
     ArrayList<Friend> friends;
     User_Controller myUserController;
+    ArrayList<User> users;
+    
            
         
     /**
@@ -47,6 +52,8 @@ public class CristoMessenger extends javax.swing.JFrame{
         jLabel3.setText("");
         jLabel6.setText("");
         myUserController = new User_Controller();
+        users = new ArrayList();
+        myUserController.getUsuarios(users);
         
         
         
@@ -60,7 +67,7 @@ public class CristoMessenger extends javax.swing.JFrame{
     }
     
     public static void returnException(String exception){
-        CristoMessenger.jTextArea1.setText(exception);
+        CristoMessenger.jTextArea1.setText(CristoMessenger.jTextArea1.getText() + "\n" + exception);
     }
     
     public void getFriendsOf(){
@@ -160,6 +167,16 @@ public class CristoMessenger extends javax.swing.JFrame{
 
         jLabel2.setText("jLabel2");
 
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jList1MouseClicked(evt);
+            }
+        });
+        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jList1ValueChanged(evt);
+            }
+        });
         jScrollPane3.setViewportView(jList1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -345,7 +362,7 @@ public class CristoMessenger extends javax.swing.JFrame{
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         User auxiliar = new User();
         ArrayList<User> users = new ArrayList();
-        myUserController.getUsuariosLoginPasswd(users);
+        myUserController.getUsuarios(users);
         Boolean existingUser = false;
         Boolean twoPasswdWll = false;
         
@@ -384,6 +401,19 @@ public class CristoMessenger extends javax.swing.JFrame{
         jTextField3.setText("Password");
         jTextField9.setText("Repeat Password");
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
+        
+    }//GEN-LAST:event_jList1MouseClicked
+
+    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
+        
+        for(int i = 0; i < users.size(); i++){
+            if(jList1.getSelectedValue().equals(users.get(i).getLogin())){
+                jTextField8.setText(users.get(i).getNombreUsuario());
+            }
+        }
+    }//GEN-LAST:event_jList1ValueChanged
 
     /**
      * @param args the command line arguments

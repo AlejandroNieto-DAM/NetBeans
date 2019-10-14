@@ -1,4 +1,5 @@
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /*
@@ -20,12 +21,18 @@ public class User_Controller {
      }
        
     
-    public void getUsuariosLoginPasswd(ArrayList<User> usuarios){
+    public void getUsuarios(ArrayList<User> usuarios){
+        CristoMessenger.returnException("Debug: getUsuarios");
         a.getUsuariosLoginPasswd(usuarios);
     }
     
     public void insertUser(User user){
+        CristoMessenger.returnException("Debug: insertUser");
         a.insertUser(user);
+    }
+    
+    public void getUser(User user) throws SQLException{
+        a.getUser(user);
     }
     
 }
