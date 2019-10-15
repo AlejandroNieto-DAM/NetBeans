@@ -163,11 +163,6 @@ public class CristoMessenger extends javax.swing.JFrame{
         jTextFieldSearch.setToolTipText("");
         jTextFieldSearch.setActionCommand("<Not Set>");
 
-        jListFriends.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jListFriendsMouseClicked(evt);
-            }
-        });
         jListFriends.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 jListFriendsValueChanged(evt);
@@ -395,10 +390,6 @@ public class CristoMessenger extends javax.swing.JFrame{
         jTextFieldUserPasswordRegister.setText("Password");
         jTextFieldUserRepeatPasswordRegister.setText("Repeat Password");
     }//GEN-LAST:event_jButtonRegisterActionPerformed
-
-    private void jListFriendsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListFriendsMouseClicked
-        
-    }//GEN-LAST:event_jListFriendsMouseClicked
 
     private void jListFriendsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListFriendsValueChanged
         
