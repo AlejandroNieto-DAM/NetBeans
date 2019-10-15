@@ -74,7 +74,7 @@ public class User_Model extends ConnectToBD{
         try {
             this.viewTable(this.getConnector(), this.getDBName(), this.getQuery(), usuarios);
         } catch (SQLException ex) {
-            Logger.getLogger(User_Model.class.getName()).log(Level.SEVERE, null, ex);
+            CristoMessenger.returnException(ex.toString());
         } 
         
     }
