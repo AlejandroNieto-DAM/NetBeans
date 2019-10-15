@@ -124,17 +124,12 @@ public class User_Model extends ConnectToBD{
                 String surname2 = rs.getString("surname2");
                 int stateInt = rs.getInt("state");
                 
-                
-
                 auxiliar.setNombreUsuario(nombre);
                 auxiliar.setApellido1(surname1);
                 auxiliar.setApellido2(surname2);
                 auxiliar.setPasswd(passwd);
                 auxiliar.setEstadoUsuario(stateInt);
-
-                
-
-
+            
             }
         } catch (SQLException e ) {
             CristoMessenger.returnException(e.toString());
