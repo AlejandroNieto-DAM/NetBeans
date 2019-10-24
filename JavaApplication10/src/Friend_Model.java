@@ -45,20 +45,14 @@ public class Friend_Model extends ConnectToBD{
                 String login2 = rs.getString("id_user_dest");
                 int request = rs.getInt("accept_request");
            
-
                 Friend auxiliar = new Friend();
+                if(request == 1){
+                    auxiliar.setLogin_orig(login);
+                    auxiliar.setLogin_des(login2);
+                    auxiliar.setAccept_request(request);
 
-                auxiliar.setLogin_orig(login);
-                auxiliar.setLogin_des(login2);
-                auxiliar.setAccept_request(request);
-                
-               
-
-                amigos.add(auxiliar);
-                
-                
-
-
+                    amigos.add(auxiliar);
+                }
             }
         } catch (SQLException e ) {
             

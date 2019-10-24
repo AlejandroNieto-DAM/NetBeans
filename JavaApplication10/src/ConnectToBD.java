@@ -28,11 +28,11 @@ public class ConnectToBD {
     ConnectToBD(){
         conector = "jdbc";
         port = "3306";
-        ip = "localhost";
-        dbName = "messenger";
+        ip = "clasedam2.ddns.net";
+        dbName = "cristomessenger";
         database = "mysql";
-        user = "root";
-        passwd = "cristorey";
+        user = "clasedam2";
+        passwd = "root";
     }
     
     
