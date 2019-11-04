@@ -14,12 +14,15 @@ public class Persona {
     private Double altura;
     private float peso;
     private int edad;
+    private int id;
 
-    public Persona(String nombre, Double altura, float peso, int edad) {
+
+    public Persona(String nombre, Double altura, float peso, int edad, int id) {
         this.nombre = nombre;
         this.altura = altura;
         this.peso = peso;
         this.edad = edad;
+        this.id = id;
     }
 
     public void setNombre(String nombre) {
@@ -54,4 +57,11 @@ public class Persona {
         return edad;
     }
     
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
