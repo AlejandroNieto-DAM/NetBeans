@@ -31,6 +31,11 @@ public class Ventana extends javax.swing.JFrame {
     private Boolean modificarGrupo;
     
     private Color colorReset;
+    
+    private int idPersonas;
+    private int idGrupos;
+    private int idLugares;
+    private int idCiudades;
 
     /**
      * Creates new form Ventana
@@ -54,6 +59,12 @@ public class Ventana extends javax.swing.JFrame {
         
         aniadirLugarB = false;
         modificarLugar = false;
+        
+        idPersonas = 0;
+        idGrupos = 0;
+        idLugares = 0;
+        idCiudades = 0;
+               
         
         colorReset = salirCiudad.getBackground();
     
@@ -857,7 +868,8 @@ public class Ventana extends javax.swing.JFrame {
     private void guardarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarPersonaActionPerformed
         if(aniadirPersonaB == true){
 
-            personas.add(new Persona(nombrePersona.getText(), Double.parseDouble(alturaPersona.getText()), Float.parseFloat(pesoPersona.getText()), Integer.parseInt(edadPersona.getText()), personas.size()));
+            idPersonas++;
+            personas.add(new Persona(nombrePersona.getText(), Double.parseDouble(alturaPersona.getText()), Float.parseFloat(pesoPersona.getText()), Integer.parseInt(edadPersona.getText()), idPersonas));
 
             nombrePersona.setEditable(false);
             alturaPersona.setEditable(false);
@@ -935,7 +947,8 @@ public class Ventana extends javax.swing.JFrame {
     private void guardarGrupoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarGrupoActionPerformed
         if(aniadirGrupoB == true){
 
-            grupos.add(new Grupo(grupos.size() , nombreGrupo.getText(), directorGrupo.getText(), Integer.parseInt(edadMinimaGrupo.getText()), horarioGrupo.getText()));
+            idGrupos++;
+            grupos.add(new Grupo(idGrupos , nombreGrupo.getText(), directorGrupo.getText(), Integer.parseInt(edadMinimaGrupo.getText()), horarioGrupo.getText()));
 
             nombreGrupo.setEditable(false);
             directorGrupo.setEditable(false);
@@ -1013,8 +1026,9 @@ public class Ventana extends javax.swing.JFrame {
 
     private void guardarLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarLugarActionPerformed
         if(aniadirLugarB == true){
-
-            lugares.add(new Lugar(lugares.size(), nombreLugar.getText(), direccionLugar.getText(), Integer.parseInt(numeroLugar.getText()), horarioLugar.getText()));
+            
+            idLugares++;
+            lugares.add(new Lugar(idLugares, nombreLugar.getText(), direccionLugar.getText(), Integer.parseInt(numeroLugar.getText()), horarioLugar.getText()));
 
             nombreLugar.setEditable(false);
             direccionLugar.setEditable(false);
@@ -1094,7 +1108,8 @@ public class Ventana extends javax.swing.JFrame {
 
         if(aniadirCiudadB == true){
 
-            ciudades.add(new Ciudad(nombreCiudad.getText(), paisCiudad.getText(), provinciaCiudad.getText(), edificioCiudad.getText(), ciudades.size()));
+            idCiudades++;
+            ciudades.add(new Ciudad(nombreCiudad.getText(), paisCiudad.getText(), provinciaCiudad.getText(), edificioCiudad.getText(), idCiudades));
 
             nombreCiudad.setEditable(false);
             paisCiudad.setEditable(false);
