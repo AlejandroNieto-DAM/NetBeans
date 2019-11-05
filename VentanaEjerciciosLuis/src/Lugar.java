@@ -1,3 +1,6 @@
+
+import java.util.ArrayList;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -14,6 +17,8 @@ public class Lugar {
     private String direccion;
     private int numeroEdif;
     private String horario;
+    
+    
 
     public Lugar(int id, String nombre, String direccion, int numeroEdif, String horario) {
         this.id = id;
@@ -21,6 +26,7 @@ public class Lugar {
         this.direccion = direccion;
         this.numeroEdif = numeroEdif;
         this.horario = horario;
+        
     }
 
     public void setId(int id) {
@@ -62,6 +68,5 @@ public class Lugar {
     public String getHorario() {
         return horario;
     }
-    
     
 }

@@ -1,3 +1,6 @@
+
+import java.util.ArrayList;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -15,6 +18,9 @@ public class Ciudad {
     private String provincia;
     private String edificioEmblematico;
     private int id;
+    
+    
+    
 
     public Ciudad(String nombre, String pais, String provincia, String edificioEmblematico, int id) {
         this.nombre = nombre;
@@ -22,6 +28,7 @@ public class Ciudad {
         this.provincia = provincia;
         this.edificioEmblematico = edificioEmblematico;
         this.id = id;
+       
     }
 
     public void setNombre(String nombre) {
@@ -63,5 +70,7 @@ public class Ciudad {
     public int getId() {
         return id;
     }
+    
+  
  
 }
