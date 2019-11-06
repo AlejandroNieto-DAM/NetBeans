@@ -19,9 +19,7 @@ public class Ventana extends javax.swing.JFrame {
     private ArrayList<Grupo> grupos;
     private ArrayList<Lugar> lugares;
     
-    private ArrayList<IdObjects> ciudadesLugares;
-    private ArrayList<IdObjects> lugaresGrupos;
-    private ArrayList<IdObjects> gruposPersonas;
+  
     
     
     private Boolean aniadirPersonaB;
@@ -75,38 +73,12 @@ public class Ventana extends javax.swing.JFrame {
         idLugares = 0;
         idCiudades = 0;
         
-        ciudadesLugares = new ArrayList();
-        lugaresGrupos = new ArrayList();
-        gruposPersonas = new ArrayList();
-        
+       
         colorReset = salirCiudad.getBackground();
     
     }
     
-    private String buscarLugarPorId(int id){
-        
-        String name = "";
-        
-        for(int i = 0; i < lugares.size(); i++){
-            if(id == lugares.get(i).getId()){
-                name = lugares.get(i).getNombre();
-            }
-        }
-        return name;
-    }
-    
-    private String buscarGrupoPorId(int id){
-        
-        String name = "";
-        
-        for(int i = 0; i < grupos.size(); i++){
-            if(id == grupos.get(i).getId()){
-                name = grupos.get(i).getNombre();
-            }
-        }
-        return name;
-    }
-    
+
     private void jListRendererCiudad(){
         
         
@@ -642,12 +614,6 @@ public class Ventana extends javax.swing.JFrame {
 
         jLabel20.setText("Horario:");
 
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
-            }
-        });
-
         jButton3.setText("jButton3");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -909,35 +875,29 @@ public class Ventana extends javax.swing.JFrame {
 
     private void borrarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarPersonaActionPerformed
         
+        
         Boolean encontrado = false; 
         for(int i = 0; i < grupos.size(); i++){
             if(personas.get(jListPersonas.getSelectedIndex()).getNombre() == grupos.get(i).getNombrePersona()){
-                
+
                 encontrado = true;
-                
+
             }
         }
-        
+
         if(encontrado == false){
             System.out.println("entrooo");
             personas.remove(jListPersonas.getSelectedIndex());
             jComboBox3.removeItemAt(jListPersonas.getSelectedIndex());
-            
         }
-        
-       
-        
-        
-        
+
         nombrePersona.setText("");
         alturaPersona.setText("");
         pesoPersona.setText("");
         edadPersona.setText("");
         
         this.jListRendererPersonas();
-        this.jListRendererGrupo();
-        this.jListRendererLugares();
-        this.jListRendererCiudad();
+        
     }//GEN-LAST:event_borrarPersonaActionPerformed
 
     private void aniadirPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aniadirPersonaActionPerformed
@@ -955,8 +915,6 @@ public class Ventana extends javax.swing.JFrame {
         borrarPersona.setEnabled(false);
 
         aniadirPersona.setBackground(Color.GREEN);
-        borrarPersona.setBackground(colorReset);
-
         aniadirPersonaB = true;
     }//GEN-LAST:event_aniadirPersonaActionPerformed
 
@@ -991,6 +949,8 @@ public class Ventana extends javax.swing.JFrame {
             personas.get(jListPersonas.getSelectedIndex()).setPeso(Float.parseFloat(pesoPersona.getText()));
             personas.get(jListPersonas.getSelectedIndex()).setEdad(Integer.parseInt(edadPersona.getText()));
 
+        } else {
+            
         }
 
         this.jListRendererPersonas();
@@ -1030,11 +990,9 @@ public class Ventana extends javax.swing.JFrame {
             }
         }
         
-        if(encontrado == false){
-            System.out.println("Entrooooo a borrar grupo");
+        if(encontrado == false){ 
             grupos.remove(jListGrupos.getSelectedIndex());
             jComboBox2.removeItemAt(jListGrupos.getSelectedIndex());
-            System.out.println("grupos size " + grupos.size());
         }
         
         
@@ -1135,16 +1093,17 @@ public class Ventana extends javax.swing.JFrame {
 
     private void borrarLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarLugarActionPerformed
         
-        
-        for(int j = 0; j < ciudades.size(); j++){
-            if(lugares.get(jListLugares.getSelectedIndex()).getNombre() == ciudades.get(j).getLugar()){
-                ciudades.remove(j);
+        Boolean encontrado = false;
+        for(int i  = 0; i < ciudades.size();i++){
+            if(ciudades.get(i).getLugar() == lugares.get(jListLugares.getSelectedIndex()).getNombre()){
+                encontrado = true;
             }
         }
         
-        lugares.remove(jListLugares.getSelectedIndex());
-        
-        jComboBox1.removeItemAt(jListLugares.getSelectedIndex());
+        if(encontrado == false){ 
+            lugares.remove(jListLugares.getSelectedIndex());
+            jComboBox1.removeItemAt(jListLugares.getSelectedIndex());
+        }
         
 
         nombreLugar.setText("");
@@ -1191,8 +1150,7 @@ public class Ventana extends javax.swing.JFrame {
             
             idLugares++;
             lugares.add(new Lugar(idLugares, nombreLugar.getText(), direccionLugar.getText(), Integer.parseInt(numeroLugar.getText()), horarioLugar.getText(), jComboBox2.getItemAt(jComboBox2.getSelectedIndex())));
-            
-            
+               
             jComboBox1.addItem(lugares.get(lugares.size() - 1).getNombre());
             
             nombreLugar.setEditable(false);
@@ -1219,17 +1177,6 @@ public class Ventana extends javax.swing.JFrame {
         modifyLugar.setBackground(colorReset);
         aniadirLugar.setBackground(colorReset);
     }//GEN-LAST:event_guardarLugarActionPerformed
-
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        
-        nombreLugar.setText("");
-        direccionLugar.setText("");
-        numeroLugar.setText("");
-        horarioLugar.setText("");
-        
-        this.jListRendererLugares();
-        
-    }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void modifyCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyCiudadActionPerformed
         if(ciudades.size() > 0){
@@ -1296,8 +1243,6 @@ public class Ventana extends javax.swing.JFrame {
 
             idCiudades++;
             ciudades.add(new Ciudad(nombreCiudad.getText(), paisCiudad.getText(), provinciaCiudad.getText(), edificioCiudad.getText(), idCiudades, jComboBox1.getItemAt(jComboBox1.getSelectedIndex())));
-
-            
 
             nombreCiudad.setEditable(false);
             paisCiudad.setEditable(false);
