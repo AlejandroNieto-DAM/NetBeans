@@ -14,14 +14,20 @@ public class Grupo {
     private String nombreDirector;
     private int edadMinima;
     private String horario;
+    private String nombrePersona;
 
-    public Grupo(int id, String nombre, String nombreDirector, int edadMinima, String horario) {
+    
+
+    public Grupo(int id, String nombre, String nombreDirector, int edadMinima, String horario, String nombrePersona) {
         this.id = id;
         this.nombre = nombre;
         this.nombreDirector = nombreDirector;
         this.edadMinima = edadMinima;
         this.horario = horario;
+        this.nombrePersona = nombrePersona;
     }
+    
+    
 
     public void setId(int id) {
         this.id = id;
@@ -63,5 +69,12 @@ public class Grupo {
         return horario;
     }
     
+    public String getNombrePersona() {
+        return nombrePersona;
+    }
+
+    public void setNombrePersona(String nombrePersona) {
+        this.nombrePersona = nombrePersona;
+    }
     
 }

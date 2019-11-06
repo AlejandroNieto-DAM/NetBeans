@@ -17,17 +17,28 @@ public class Lugar {
     private String direccion;
     private int numeroEdif;
     private String horario;
-    
-    
+    public String grupo;
 
-    public Lugar(int id, String nombre, String direccion, int numeroEdif, String horario) {
+    public Lugar(int id, String nombre, String direccion, int numeroEdif, String horario, String grupo) {
         this.id = id;
         this.nombre = nombre;
         this.direccion = direccion;
         this.numeroEdif = numeroEdif;
         this.horario = horario;
-        
+        this.grupo = grupo;
     }
+
+    public void setGrupo(String grupo) {
+        this.grupo = grupo;
+    }
+
+    public String getGrupo() {
+        return grupo;
+    }
+    
+    
+
+    
 
     public void setId(int id) {
         this.id = id;

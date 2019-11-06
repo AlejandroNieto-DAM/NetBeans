@@ -18,19 +18,30 @@ public class Ciudad {
     private String provincia;
     private String edificioEmblematico;
     private int id;
+    private String lugar;
     
     
     
 
-    public Ciudad(String nombre, String pais, String provincia, String edificioEmblematico, int id) {
+    public Ciudad(String nombre, String pais, String provincia, String edificioEmblematico, int id, String lugar) {
         this.nombre = nombre;
         this.pais = pais;
         this.provincia = provincia;
         this.edificioEmblematico = edificioEmblematico;
         this.id = id;
+        this.lugar = lugar;
        
     }
 
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
+    }
+
+    public String getLugar() {
+        return lugar;
+    }
+
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
