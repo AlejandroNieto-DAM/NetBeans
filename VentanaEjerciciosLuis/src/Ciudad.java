@@ -1,4 +1,5 @@
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /*
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author alejandronieto
  */
-public class Ciudad {
+public class Ciudad implements Serializable{
     
     private String nombre;
     private String pais;

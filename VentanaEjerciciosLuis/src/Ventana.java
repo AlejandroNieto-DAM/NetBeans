@@ -1,6 +1,17 @@
 
 import java.awt.Color;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -48,7 +59,7 @@ public class Ventana extends javax.swing.JFrame {
     /**
      * Creates new form Ventana
      */
-    public Ventana() {
+    public Ventana() throws IOException, FileNotFoundException, ClassNotFoundException {
         initComponents();
         
         personas = new ArrayList();
@@ -75,10 +86,12 @@ public class Ventana extends javax.swing.JFrame {
         
        
         colorReset = salirCiudad.getBackground();
-    
+        
+        
+            
     }
     
-
+    
     private void jListRendererCiudad(){
         
         
@@ -240,6 +253,7 @@ public class Ventana extends javax.swing.JFrame {
         jLabel26 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         guardarGrupo = new javax.swing.JButton();
         salirGrupo = new javax.swing.JButton();
@@ -355,6 +369,13 @@ public class Ventana extends javax.swing.JFrame {
 
         jLabel28.setText("Edad");
 
+        jButton4.setText("Cancelar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -375,22 +396,23 @@ public class Ventana extends javax.swing.JFrame {
                             .addComponent(nombrePersona, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pesoPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(aniadirPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(salirPersona)
                         .addComponent(modifyPersona, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(guardarPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(borrarPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(51, Short.MAX_VALUE))
+                    .addComponent(borrarPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(aniadirPersona)
                         .addGap(18, 18, 18)
                         .addComponent(borrarPersona)
@@ -398,25 +420,31 @@ public class Ventana extends javax.swing.JFrame {
                         .addComponent(modifyPersona))
                     .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nombrePersona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel25))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(alturaPersona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel26)
-                    .addComponent(guardarPersona))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(pesoPersona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel27))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(nombrePersona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel25))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(alturaPersona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel26))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(pesoPersona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel27))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(guardarPersona)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4)
+                        .addGap(17, 17, 17)))
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(edadPersona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel28))
                     .addComponent(salirPersona))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Persona", jPanel8);
@@ -479,7 +507,12 @@ public class Ventana extends javax.swing.JFrame {
 
         jLabel24.setText("Horario:");
 
-        jButton2.setText("jButton2");
+        jButton2.setText("Cancelar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -551,7 +584,7 @@ public class Ventana extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(salirGrupo))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Grupo", jPanel7);
@@ -614,7 +647,12 @@ public class Ventana extends javax.swing.JFrame {
 
         jLabel20.setText("Horario:");
 
-        jButton3.setText("jButton3");
+        jButton3.setText("Cancelar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -686,7 +724,7 @@ public class Ventana extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(salirLugar))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Lugar", jPanel6);
@@ -749,7 +787,12 @@ public class Ventana extends javax.swing.JFrame {
 
         jLabel16.setText("Edificio famoso:");
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Cancelar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -830,7 +873,7 @@ public class Ventana extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(salirCiudad)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 13, Short.MAX_VALUE))
+                .addGap(0, 22, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Ciudad", jPanel5);
@@ -847,8 +890,9 @@ public class Ventana extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 457, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -926,7 +970,11 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_jListPersonasMouseClicked
 
     private void salirPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirPersonaActionPerformed
-        System.exit(0);
+        try {
+            this.accionSalir();
+        } catch (IOException ex) {
+            Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_salirPersonaActionPerformed
 
     private void guardarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarPersonaActionPerformed
@@ -1002,8 +1050,7 @@ public class Ventana extends javax.swing.JFrame {
         horarioGrupo.setText("");
         
         this.jListRendererGrupo();
-        this.jListRendererLugares();
-        this.jListRendererCiudad();
+       
         
     }//GEN-LAST:event_borrarGrupoActionPerformed
 
@@ -1017,6 +1064,7 @@ public class Ventana extends javax.swing.JFrame {
         directorGrupo.setText("");
         edadMinimaGrupo.setText("");
         horarioGrupo.setText("");
+       
 
         modifyGrupo.setEnabled(false);
         borrarGrupo.setEnabled(false);
@@ -1035,7 +1083,11 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_jListGruposMouseClicked
 
     private void salirGrupoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirGrupoActionPerformed
-        System.exit(0);
+        try {
+            this.accionSalir();
+        } catch (IOException ex) {
+            Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_salirGrupoActionPerformed
 
     private void guardarGrupoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarGrupoActionPerformed
@@ -1112,7 +1164,6 @@ public class Ventana extends javax.swing.JFrame {
         horarioLugar.setText("");
         
         this.jListRendererLugares();
-        this.jListRendererCiudad();
     }//GEN-LAST:event_borrarLugarActionPerformed
 
     private void aniadirLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aniadirLugarActionPerformed
@@ -1142,7 +1193,11 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_jListLugaresMouseClicked
 
     private void salirLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirLugarActionPerformed
-        System.exit(0);
+        try {
+            this.accionSalir();
+        } catch (IOException ex) {
+            Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_salirLugarActionPerformed
 
     private void guardarLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarLugarActionPerformed
@@ -1234,7 +1289,11 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_jListCiudadMouseClicked
 
     private void salirCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirCiudadActionPerformed
-        System.exit(0);
+        try {
+            this.accionSalir();
+        } catch (IOException ex) {
+            Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_salirCiudadActionPerformed
 
     private void guardarCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarCiudadActionPerformed
@@ -1268,42 +1327,283 @@ public class Ventana extends javax.swing.JFrame {
         aniadirCiudad.setBackground(colorReset);
     }//GEN-LAST:event_guardarCiudadActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        nombrePersona.setText("");
+        alturaPersona.setText("");
+        pesoPersona.setText("");
+        edadPersona.setText("");
+        
+        aniadirPersonaB = false;
+        modificarPersona = false;
+        aniadirPersona.setEnabled(true);
+        borrarPersona.setEnabled(true);
+        modifyPersona.setEnabled(true);
+        modifyPersona.setBackground(colorReset);
+        aniadirPersona.setBackground(colorReset);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        aniadirLugarB = false;
+        modificarLugar = false;
+        aniadirLugar.setEnabled(true);
+        borrarLugar.setEnabled(true);
+        modifyLugar.setEnabled(true);
+        modifyLugar.setBackground(colorReset);
+        aniadirLugar.setBackground(colorReset);
+        nombreLugar.setText("");
+        direccionLugar.setText("");
+        numeroLugar.setText("");
+        horarioLugar.setText("");
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        aniadirLugarB = false;
+        modificarLugar = false;
+        aniadirLugar.setEnabled(true);
+        borrarLugar.setEnabled(true);
+        modifyLugar.setEnabled(true);
+        modifyLugar.setBackground(colorReset);
+        aniadirLugar.setBackground(colorReset);
+        nombreLugar.setText("");
+        direccionLugar.setText("");
+        numeroLugar.setText("");
+        horarioLugar.setText("");
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        nombreGrupo.setText("");
+        directorGrupo.setText("");
+        edadMinimaGrupo.setText("");
+        horarioGrupo.setText("");
+        aniadirGrupoB = false;
+        modificarGrupo = false;
+        aniadirGrupo.setEnabled(true);
+        borrarGrupo.setEnabled(true);
+        modifyGrupo.setEnabled(true);
+        modifyGrupo.setBackground(colorReset);
+        aniadirGrupo.setBackground(colorReset);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    public void guardarPersonas() throws IOException{
+        File ficheroBorrar = new File("FichPersona.dat");
+        ficheroBorrar.delete();
+        File fichero = new File("FichPersona.dat");
+        FileOutputStream fileout = new FileOutputStream(fichero,true);  
+        ObjectOutputStream dataOS = new ObjectOutputStream(fileout);  
+
+        
+        for (int i=0;i < personas.size(); i++){ //recorro los arrays    
+	  
+            dataOS.writeObject(personas.get(i)); //escribo la persona en el fichero
+            //System.out.println("GRABO LOS DATOS DE PERSONA.");  
+               
+        }     
+        
+        dataOS.close();  //cerrar stream de salida   
+        
+        
+    }
+
+    public void leerPersonas() throws FileNotFoundException, IOException, ClassNotFoundException, EOFException{
+        Persona persona;// defino la variable persona
+        File fichero = new File("FichPersona.dat");
+        
+        if(fichero.length() > 0){
+        
+            ObjectInputStream dataIS = new ObjectInputStream(new FileInputStream(fichero));
+
+
+            try {
+
+                while (true) { // lectura del fichero
+                    persona = (Persona) dataIS.readObject(); // leer una Persona
+                    personas.add(new Persona(persona.getNombre(), persona.getAltura(), persona.getPeso(), persona.getEdad(), persona.getId()));
+                    jComboBox3.addItem(persona.getNombre());
+                    //System.out.println("leooo");
+                }
+
+            } catch (EOFException eo) {
+                    //System.out.println("FIN DE LECTURA.");
+            } catch (StreamCorruptedException x) {
+            }
+
+
+            dataIS.close();
+        }
+        
+        this.jListRendererPersonas();
+    }
     
+    public void guardarGrupos() throws FileNotFoundException, IOException{
+        File ficheroBorrar = new File("FichGrupo.dat");
+        ficheroBorrar.delete();
+        File fichero = new File("FichGrupo.dat");
+        FileOutputStream fileout = new FileOutputStream(fichero,true);  
+        ObjectOutputStream dataOS = new ObjectOutputStream(fileout);  
+
+        
+        for (int i=0;i < grupos.size(); i++){ //recorro los arrays    
+	  
+            dataOS.writeObject(grupos.get(i)); //escribo la persona en el fichero
+            //System.out.println("GRABO LOS DATOS DE PERSONA.");  
+               
+        }     
+        
+        dataOS.close();  //cerrar stream de salida   
+        
+        
+    }
+    
+    public void leerGrupos() throws FileNotFoundException, IOException, ClassNotFoundException{
+        Grupo grupo;// defino la variable persona
+        File fichero = new File("FichGrupo.dat");
+        
+        if(fichero.length() > 0){
+        
+            ObjectInputStream dataIS = new ObjectInputStream(new FileInputStream(fichero));
+
+
+            try {
+
+                while (true) { // lectura del fichero
+                    grupo = (Grupo) dataIS.readObject(); // leer una Persona
+                    grupos.add(new Grupo(grupo.getId(), grupo.getNombre(), grupo.getNombreDirector(), grupo.getEdadMinima(), grupo.getHorario(), grupo.getNombrePersona()));
+                    jComboBox2.addItem(grupo.getNombre());
+                    //System.out.println("leooo");
+                }
+
+            } catch (EOFException eo) {
+                    //System.out.println("FIN DE LECTURA.");
+            } catch (StreamCorruptedException x) {
+            }
+
+
+            dataIS.close();
+        }
+        
+        this.jListRendererGrupo();
+    }
+    
+    public void guardarLugares() throws IOException{
+        File ficheroBorrar = new File("FichLugar.dat");
+        ficheroBorrar.delete();
+        File fichero = new File("FichLugar.dat");
+        FileOutputStream fileout = new FileOutputStream(fichero,true);  
+        ObjectOutputStream dataOS = new ObjectOutputStream(fileout);  
+
+        
+        for (int i=0;i < lugares.size(); i++){ //recorro los arrays    
+	  
+            dataOS.writeObject(lugares.get(i)); //escribo la persona en el fichero
+            //System.out.println("GRABO LOS DATOS DE PERSONA.");  
+               
+        }     
+        
+        dataOS.close();  //cerrar stream de salida   
+        
+    }
+    
+    public void leerLugares() throws FileNotFoundException, IOException, ClassNotFoundException{
+        Lugar lugar;// defino la variable persona
+        File fichero = new File("FichLugar.dat");
+        
+        if(fichero.length() > 0){
+        
+            ObjectInputStream dataIS = new ObjectInputStream(new FileInputStream(fichero));
+
+
+            try {
+
+                while (true) { // lectura del fichero
+                    lugar = (Lugar) dataIS.readObject(); // leer una Persona
+                    lugares.add(new Lugar(lugar.getId(), lugar.getNombre(), lugar.getDireccion(), lugar.getNumeroEdif(), lugar.getHorario(), lugar.getGrupo()));
+                    jComboBox1.addItem(lugar.getNombre());
+                    //System.out.println("leooo");
+                }
+
+            } catch (EOFException eo) {
+                    //System.out.println("FIN DE LECTURA.");
+            } catch (StreamCorruptedException x) {
+            }
+
+
+            dataIS.close();
+        }
+        
+        this.jListRendererLugares();
+    }
+    
+    public void guardarCiudades() throws FileNotFoundException, IOException{
+        File ficheroBorrar = new File("FichCiudad.dat");
+        ficheroBorrar.delete();
+        File fichero = new File("FichCiudad.dat");
+        FileOutputStream fileout = new FileOutputStream(fichero,true);  
+        ObjectOutputStream dataOS = new ObjectOutputStream(fileout);  
+
+        
+        for (int i=0;i < ciudades.size(); i++){ //recorro los arrays    
+	  
+            dataOS.writeObject(ciudades.get(i)); //escribo la persona en el fichero
+            //System.out.println("GRABO LOS DATOS DE PERSONA.");  
+               
+        }     
+        
+        dataOS.close();  //cerrar stream de salida 
+    }
+    
+    public void leerCiudades() throws FileNotFoundException, IOException, ClassNotFoundException{
+        Ciudad ciudad;// defino la variable persona
+        File fichero = new File("FichCiudad.dat");
+        
+        if(fichero.length() > 0){
+        
+            ObjectInputStream dataIS = new ObjectInputStream(new FileInputStream(fichero));
+
+
+            try {
+
+                while (true) { // lectura del fichero
+                    ciudad = (Ciudad) dataIS.readObject(); // leer una Persona
+                    ciudades.add(new Ciudad( ciudad.getNombre(), ciudad.getPais(), ciudad.getProvincia(), ciudad.getEdificioEmblematico(), ciudad.getId(), ciudad.getLugar()));
+                    
+                }
+
+            } catch (EOFException eo) {
+                    //System.out.println("FIN DE LECTURA.");
+            } catch (StreamCorruptedException x) {
+            }
+
+
+            dataIS.close();
+        }
+        
+        this.jListRendererCiudad();
+    }
+    
+    public void accionSalir() throws IOException{
+        this.guardarPersonas();
+        this.guardarGrupos();
+        this.guardarLugares();
+        this.guardarCiudades();
+        
+        System.exit(0);
+    }
     
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Ventana.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Ventana.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Ventana.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Ventana.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Ventana().setVisible(true);
-            }
-        });
-    }
+    public static void main(String args[]) throws IOException, FileNotFoundException, ClassNotFoundException {
+        Ventana nuevaVentana = new Ventana();
+        System.out.println("yeye");
+        nuevaVentana.leerPersonas();
+        nuevaVentana.leerGrupos();
+        nuevaVentana.leerLugares();
+        nuevaVentana.leerCiudades();
+        System.out.println("yeye");
+        nuevaVentana.setVisible(true);
+   }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Director;
@@ -1330,6 +1630,7 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;

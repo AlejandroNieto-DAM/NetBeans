@@ -1,3 +1,6 @@
+
+import java.io.Serializable;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,7 +11,7 @@
  *
  * @author alejandronieto
  */
-public class Persona {
+public class Persona implements Serializable{
     
     private String nombre;
     private Double altura;
@@ -24,6 +27,7 @@ public class Persona {
         this.edad = edad;
         this.id = id;
     }
+    
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -64,4 +68,6 @@ public class Persona {
     public void setId(int id) {
         this.id = id;
     }
+    
+  
 }
