@@ -79,6 +79,11 @@ public class Ventana extends javax.swing.JFrame {
         aniadirLugarB = false;
         modificarLugar = false;
         
+        jComboBox3.setEnabled(false);
+        jComboBox1.setEnabled(false);
+        jComboBox2.setEnabled(false);
+        
+        
         idPersonas = 0;
         idGrupos = 0;
         idLugares = 0;
@@ -899,74 +904,19 @@ public class Ventana extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void modifyPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyPersonaActionPerformed
-        if(personas.size() > 0){
-            nombrePersona.setEditable(true);
-            alturaPersona.setEditable(true);
-            pesoPersona.setEditable(true);
-            edadPersona.setEditable(true);
-
-            modifyPersona.setBackground(Color.GREEN);
-            borrarPersona.setBackground(colorReset);
-
-            borrarPersona.setEnabled(false);
-            aniadirPersona.setEnabled(false);
-
-            modificarPersona = true;
-
-            
-        }
+        this.modifyPersona();
     }//GEN-LAST:event_modifyPersonaActionPerformed
 
     private void borrarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarPersonaActionPerformed
-        
-        
-        Boolean encontrado = false; 
-        for(int i = 0; i < grupos.size(); i++){
-            if(personas.get(jListPersonas.getSelectedIndex()).getNombre() == grupos.get(i).getNombrePersona()){
-
-                encontrado = true;
-
-            }
-        }
-
-        if(encontrado == false){
-            System.out.println("entrooo");
-            personas.remove(jListPersonas.getSelectedIndex());
-            jComboBox3.removeItemAt(jListPersonas.getSelectedIndex());
-        }
-
-        nombrePersona.setText("");
-        alturaPersona.setText("");
-        pesoPersona.setText("");
-        edadPersona.setText("");
-        
-        this.jListRendererPersonas();
-        
+        this.borrarPersona(); 
     }//GEN-LAST:event_borrarPersonaActionPerformed
 
     private void aniadirPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aniadirPersonaActionPerformed
-        nombrePersona.setEditable(true);
-        alturaPersona.setEditable(true);
-        pesoPersona.setEditable(true);
-        edadPersona.setEditable(true);
-        
-        nombrePersona.setText("");
-        alturaPersona.setText("");
-        pesoPersona.setText("");
-        edadPersona.setText("");
-
-        modifyPersona.setEnabled(false);
-        borrarPersona.setEnabled(false);
-
-        aniadirPersona.setBackground(Color.GREEN);
-        aniadirPersonaB = true;
+        this.aniadirPersona();
     }//GEN-LAST:event_aniadirPersonaActionPerformed
 
     private void jListPersonasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListPersonasMouseClicked
-        nombrePersona.setText(personas.get(jListPersonas.getSelectedIndex()).getNombre());
-        alturaPersona.setText(String.valueOf(personas.get(jListPersonas.getSelectedIndex()).getAltura()));
-        pesoPersona.setText(String.valueOf(personas.get(jListPersonas.getSelectedIndex()).getPeso()));
-        edadPersona.setText(String.valueOf(personas.get(jListPersonas.getSelectedIndex()).getEdad()));
+        this.mostrarPersona();
     }//GEN-LAST:event_jListPersonasMouseClicked
 
     private void salirPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirPersonaActionPerformed
@@ -978,108 +928,25 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_salirPersonaActionPerformed
 
     private void guardarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarPersonaActionPerformed
-        if(aniadirPersonaB == true){
-
-            idPersonas++;
-            personas.add(new Persona(nombrePersona.getText(), Double.parseDouble(alturaPersona.getText()), Float.parseFloat(pesoPersona.getText()), Integer.parseInt(edadPersona.getText()), idPersonas));
-
-            jComboBox3.addItem(personas.get(personas.size() - 1).getNombre());
-            
-            nombrePersona.setEditable(false);
-            alturaPersona.setEditable(false);
-            pesoPersona.setEditable(false);
-            edadPersona.setEditable(false);
-
-        } else if(modificarPersona == true){
-
-            personas.get(jListPersonas.getSelectedIndex()).setNombre(nombrePersona.getText());
-            personas.get(jListPersonas.getSelectedIndex()).setAltura(Double.parseDouble(alturaPersona.getText()));
-            personas.get(jListPersonas.getSelectedIndex()).setPeso(Float.parseFloat(pesoPersona.getText()));
-            personas.get(jListPersonas.getSelectedIndex()).setEdad(Integer.parseInt(edadPersona.getText()));
-
-        } else {
-            
-        }
-
-        this.jListRendererPersonas();
-        aniadirPersonaB = false;
-        modificarPersona = false;
-        aniadirPersona.setEnabled(true);
-        borrarPersona.setEnabled(true);
-        modifyPersona.setEnabled(true);
-        modifyPersona.setBackground(colorReset);
-        aniadirPersona.setBackground(colorReset);
+        this.guardarPersona();
     }//GEN-LAST:event_guardarPersonaActionPerformed
 
     private void modifyGrupoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyGrupoActionPerformed
-        if(grupos.size() > 0){
-            nombreGrupo.setEditable(true);
-            directorGrupo.setEditable(true);
-            edadMinimaGrupo.setEditable(true);
-            horarioGrupo.setEditable(true);
-
-            modifyGrupo.setBackground(Color.GREEN);
-
-            borrarGrupo.setEnabled(false);
-            aniadirGrupo.setEnabled(false);
-
-            modificarGrupo= true;
-
-            
-        }
+        this.modifyGrupo();
     }//GEN-LAST:event_modifyGrupoActionPerformed
 
     private void borrarGrupoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarGrupoActionPerformed
-        
-        Boolean encontrado = false;
-        for(int i  = 0; i < lugares.size();i++){
-            if(lugares.get(i).getGrupo() == grupos.get(jListGrupos.getSelectedIndex()).getNombre()){
-                encontrado = true;
-            }
-        }
-        
-        if(encontrado == false){ 
-            grupos.remove(jListGrupos.getSelectedIndex());
-            jComboBox2.removeItemAt(jListGrupos.getSelectedIndex());
-        }
-        
-        
-        nombreGrupo.setText("");
-        directorGrupo.setText("");
-        edadMinimaGrupo.setText("");
-        horarioGrupo.setText("");
-        
-        this.jListRendererGrupo();
-       
-        
+    
+        this.borrarGrupo();
+   
     }//GEN-LAST:event_borrarGrupoActionPerformed
 
     private void aniadirGrupoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aniadirGrupoActionPerformed
-        nombreGrupo.setEditable(true);
-        directorGrupo.setEditable(true);
-        edadMinimaGrupo.setEditable(true);
-        horarioGrupo.setEditable(true);
-        
-        nombreGrupo.setText("");
-        directorGrupo.setText("");
-        edadMinimaGrupo.setText("");
-        horarioGrupo.setText("");
-       
-
-        modifyGrupo.setEnabled(false);
-        borrarGrupo.setEnabled(false);
-
-        aniadirGrupo.setBackground(Color.GREEN);
-        
-
-        aniadirGrupoB = true;
+        this.aniadirGrupo();
     }//GEN-LAST:event_aniadirGrupoActionPerformed
 
     private void jListGruposMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListGruposMouseClicked
-        nombreGrupo.setText(grupos.get(jListGrupos.getSelectedIndex()).getNombre());
-        directorGrupo.setText(grupos.get(jListGrupos.getSelectedIndex()).getNombreDirector());
-        edadMinimaGrupo.setText(String.valueOf(grupos.get(jListGrupos.getSelectedIndex()).getEdadMinima()));
-        horarioGrupo.setText(grupos.get(jListGrupos.getSelectedIndex()).getHorario());
+        this.mostrarGrupo();
     }//GEN-LAST:event_jListGruposMouseClicked
 
     private void salirGrupoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirGrupoActionPerformed
@@ -1091,105 +958,23 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_salirGrupoActionPerformed
 
     private void guardarGrupoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarGrupoActionPerformed
-        if(aniadirGrupoB == true){
-
-            idGrupos++;
-
-            grupos.add(new Grupo(idGrupos, nombreGrupo.getText(), directorGrupo.getText(), Integer.parseInt(edadMinimaGrupo.getText()), horarioGrupo.getText(), jComboBox3.getItemAt(jComboBox3.getSelectedIndex())));
-                                
-            jComboBox2.addItem(grupos.get(grupos.size() - 1).getNombre());
-                    
-            nombreGrupo.setEditable(false);
-            directorGrupo.setEditable(false);
-            edadMinimaGrupo.setEditable(false);
-            horarioGrupo.setEditable(false);
-            
-
-        } else if(modificarGrupo == true){
-          
-            grupos.get(jListGrupos.getSelectedIndex()).setNombre(nombreGrupo.getText());
-            grupos.get(jListGrupos.getSelectedIndex()).setNombreDirector(directorGrupo.getText());
-            grupos.get(jListGrupos.getSelectedIndex()).setEdadMinima(Integer.parseInt(edadMinimaGrupo.getText()));
-            grupos.get(jListGrupos.getSelectedIndex()).setHorario(horarioGrupo.getText());
-
-        }
-
-        this.jListRendererGrupo();
-        aniadirGrupoB = false;
-        modificarGrupo = false;
-        aniadirGrupo.setEnabled(true);
-        borrarGrupo.setEnabled(true);
-        modifyGrupo.setEnabled(true);
-        modifyGrupo.setBackground(colorReset);
-        aniadirGrupo.setBackground(colorReset);
+        this.guardarGrupo();
     }//GEN-LAST:event_guardarGrupoActionPerformed
 
     private void modifyLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyLugarActionPerformed
-        
-        
-
-            nombreLugar.setEditable(true);
-            direccionLugar.setEditable(true);
-            numeroLugar.setEditable(true);
-            horarioLugar.setEditable(true);
-
-            modifyLugar.setBackground(Color.GREEN);
-
-            borrarLugar.setEnabled(false);
-            aniadirLugar.setEnabled(false);
-
-            modificarLugar= true;            
-       
-        
+          this.modifyLugar();
     }//GEN-LAST:event_modifyLugarActionPerformed
 
     private void borrarLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarLugarActionPerformed
-        
-        Boolean encontrado = false;
-        for(int i  = 0; i < ciudades.size();i++){
-            if(ciudades.get(i).getLugar() == lugares.get(jListLugares.getSelectedIndex()).getNombre()){
-                encontrado = true;
-            }
-        }
-        
-        if(encontrado == false){ 
-            lugares.remove(jListLugares.getSelectedIndex());
-            jComboBox1.removeItemAt(jListLugares.getSelectedIndex());
-        }
-        
-
-        nombreLugar.setText("");
-        direccionLugar.setText("");
-        numeroLugar.setText("");
-        horarioLugar.setText("");
-        
-        this.jListRendererLugares();
+        this.borrarLugar();
     }//GEN-LAST:event_borrarLugarActionPerformed
 
     private void aniadirLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aniadirLugarActionPerformed
-        nombreLugar.setEditable(true);
-        direccionLugar.setEditable(true);
-        numeroLugar.setEditable(true);
-        horarioLugar.setEditable(true);
-
-        nombreLugar.setText("");
-        direccionLugar.setText("");
-        numeroLugar.setText("");
-        horarioLugar.setText("");
-        
-        modifyLugar.setEnabled(false);
-        borrarLugar.setEnabled(false);
-
-        aniadirLugar.setBackground(Color.GREEN);
-
-        aniadirLugarB = true;
+        this.aniadirLugar();
     }//GEN-LAST:event_aniadirLugarActionPerformed
 
     private void jListLugaresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListLugaresMouseClicked
-        nombreLugar.setText(lugares.get(jListLugares.getSelectedIndex()).getNombre());
-        direccionLugar.setText(lugares.get(jListLugares.getSelectedIndex()).getDireccion());
-        numeroLugar.setText(String.valueOf(lugares.get(jListLugares.getSelectedIndex()).getNumeroEdif()));
-        horarioLugar.setText(lugares.get(jListLugares.getSelectedIndex()).getHorario());
+        this.mostrarLugar();
     }//GEN-LAST:event_jListLugaresMouseClicked
 
     private void salirLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirLugarActionPerformed
@@ -1201,91 +986,23 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_salirLugarActionPerformed
 
     private void guardarLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarLugarActionPerformed
-        if(aniadirLugarB == true){
-            
-            idLugares++;
-            lugares.add(new Lugar(idLugares, nombreLugar.getText(), direccionLugar.getText(), Integer.parseInt(numeroLugar.getText()), horarioLugar.getText(), jComboBox2.getItemAt(jComboBox2.getSelectedIndex())));
-               
-            jComboBox1.addItem(lugares.get(lugares.size() - 1).getNombre());
-            
-            nombreLugar.setEditable(false);
-            direccionLugar.setEditable(false);
-            numeroLugar.setEditable(false);
-            horarioLugar.setEditable(false);
-            
-
-        } else if(modificarLugar == true){
-
-            lugares.get(jListLugares.getSelectedIndex()).setNombre(nombreLugar.getText());
-            lugares.get(jListLugares.getSelectedIndex()).setDireccion(direccionLugar.getText());
-            lugares.get(jListLugares.getSelectedIndex()).setNumeroEdif(Integer.parseInt(numeroLugar.getText()));
-            lugares.get(jListLugares.getSelectedIndex()).setHorario(horarioLugar.getText());
-
-        }
-        
-        this.jListRendererLugares();
-        aniadirLugarB = false;
-        modificarLugar = false;
-        aniadirLugar.setEnabled(true);
-        borrarLugar.setEnabled(true);
-        modifyLugar.setEnabled(true);
-        modifyLugar.setBackground(colorReset);
-        aniadirLugar.setBackground(colorReset);
+        this.guardarLugar();
     }//GEN-LAST:event_guardarLugarActionPerformed
 
     private void modifyCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyCiudadActionPerformed
-        if(ciudades.size() > 0){
-            nombreCiudad.setEditable(true);
-            provinciaCiudad.setEditable(true);
-            paisCiudad.setEditable(true);
-            edificioCiudad.setEditable(true);
-
-            modifyCiudad.setBackground(Color.GREEN);
-
-            borrarCiudad.setEnabled(false);
-            aniadirCiudad.setEnabled(false);
-
-            modificarCiudad = true;
-
-        }
+        this.modifyCiudad();
     }//GEN-LAST:event_modifyCiudadActionPerformed
 
     private void borrarCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarCiudadActionPerformed
-        
-        ciudades.remove(jListCiudad.getSelectedIndex());
-
-        nombreCiudad.setText("");
-        provinciaCiudad.setText("");
-        paisCiudad.setText("");
-        edificioCiudad.setText("");
-
-        this.jListRendererCiudad();
+        this.borrarCiudad();
     }//GEN-LAST:event_borrarCiudadActionPerformed
 
     private void aniadirCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aniadirCiudadActionPerformed
-        nombreCiudad.setEditable(true);
-        provinciaCiudad.setEditable(true);
-        paisCiudad.setEditable(true);
-        edificioCiudad.setEditable(true);
-
-        nombreCiudad.setText("");
-        provinciaCiudad.setText("");
-        paisCiudad.setText("");
-        edificioCiudad.setText("");
-
-        modifyCiudad.setEnabled(false);
-        borrarCiudad.setEnabled(false);
-
-        aniadirCiudad.setBackground(Color.GREEN);
-
-        aniadirCiudadB = true;
+       this.aniadirCiudad();
     }//GEN-LAST:event_aniadirCiudadActionPerformed
 
     private void jListCiudadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListCiudadMouseClicked
-        nombreCiudad.setText(ciudades.get(jListCiudad.getSelectedIndex()).getNombre());
-        paisCiudad.setText(ciudades.get(jListCiudad.getSelectedIndex()).getPais());
-        provinciaCiudad.setText(ciudades.get(jListCiudad.getSelectedIndex()).getProvincia());
-        edificioCiudad.setText(ciudades.get(jListCiudad.getSelectedIndex()).getEdificioEmblematico());
+        this.mostrarCiudad();
     }//GEN-LAST:event_jListCiudadMouseClicked
 
     private void salirCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirCiudadActionPerformed
@@ -1297,34 +1014,7 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_salirCiudadActionPerformed
 
     private void guardarCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarCiudadActionPerformed
-
-        if(aniadirCiudadB == true){
-
-            idCiudades++;
-            ciudades.add(new Ciudad(nombreCiudad.getText(), paisCiudad.getText(), provinciaCiudad.getText(), edificioCiudad.getText(), idCiudades, jComboBox1.getItemAt(jComboBox1.getSelectedIndex())));
-
-            nombreCiudad.setEditable(false);
-            paisCiudad.setEditable(false);
-            provinciaCiudad.setEditable(false);
-            edificioCiudad.setEditable(false);
-
-        } else if(modificarCiudad == true){
-
-            ciudades.get(jListCiudad.getSelectedIndex()).setNombre(nombreCiudad.getText());
-            ciudades.get(jListCiudad.getSelectedIndex()).setPais(paisCiudad.getText());
-            ciudades.get(jListCiudad.getSelectedIndex()).setProvincia(provinciaCiudad.getText());
-            ciudades.get(jListCiudad.getSelectedIndex()).setEdificioEmblematico(edificioCiudad.getText());
-
-        }
-
-        this.jListRendererCiudad();
-        aniadirCiudadB = false;
-        modificarCiudad = false;
-        aniadirCiudad.setEnabled(true);
-        borrarCiudad.setEnabled(true);
-        modifyCiudad.setEnabled(true);
-        modifyCiudad.setBackground(colorReset);
-        aniadirCiudad.setBackground(colorReset);
+        this.guardarCiudad();
     }//GEN-LAST:event_guardarCiudadActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -1591,17 +1281,444 @@ public class Ventana extends javax.swing.JFrame {
         System.exit(0);
     }
     
+    public void aniadirPersona(){
+        nombrePersona.setEditable(true);
+        alturaPersona.setEditable(true);
+        pesoPersona.setEditable(true);
+        edadPersona.setEditable(true);
+        
+        nombrePersona.setText("");
+        alturaPersona.setText("");
+        pesoPersona.setText("");
+        edadPersona.setText("");
+
+        modifyPersona.setEnabled(false);
+        borrarPersona.setEnabled(false);
+
+        aniadirPersona.setBackground(Color.GREEN);
+        aniadirPersonaB = true;
+    }
+    
+    public void modifyPersona(){
+        if(personas.size() > 0){
+            nombrePersona.setEditable(true);
+            alturaPersona.setEditable(true);
+            pesoPersona.setEditable(true);
+            edadPersona.setEditable(true);
+
+            modifyPersona.setBackground(Color.GREEN);
+            borrarPersona.setBackground(colorReset);
+
+            borrarPersona.setEnabled(false);
+            aniadirPersona.setEnabled(false);
+
+            modificarPersona = true;
+
+            
+        }
+    }
+    
+    public void borrarPersona(){
+        Boolean encontrado = false; 
+        for(int i = 0; i < grupos.size(); i++){
+            if(personas.get(jListPersonas.getSelectedIndex()).getNombre() == grupos.get(i).getNombrePersona()){
+
+                encontrado = true;
+
+            }
+        }
+
+        if(encontrado == false){
+            //System.out.println("entrooo");
+            personas.remove(jListPersonas.getSelectedIndex());
+            jComboBox3.removeItemAt(jListPersonas.getSelectedIndex());
+        }
+
+        nombrePersona.setText("");
+        alturaPersona.setText("");
+        pesoPersona.setText("");
+        edadPersona.setText("");
+        
+        this.jListRendererPersonas();
+    }
+    
+    public void mostrarPersona(){
+        nombrePersona.setText(personas.get(jListPersonas.getSelectedIndex()).getNombre());
+        alturaPersona.setText(String.valueOf(personas.get(jListPersonas.getSelectedIndex()).getAltura()));
+        pesoPersona.setText(String.valueOf(personas.get(jListPersonas.getSelectedIndex()).getPeso()));
+        edadPersona.setText(String.valueOf(personas.get(jListPersonas.getSelectedIndex()).getEdad()));
+    }
+    
+    public void guardarPersona(){
+        if(aniadirPersonaB == true){
+
+            idPersonas++;
+            personas.add(new Persona(nombrePersona.getText(), Double.parseDouble(alturaPersona.getText()), Float.parseFloat(pesoPersona.getText()), Integer.parseInt(edadPersona.getText()), idPersonas));
+
+            jComboBox3.addItem(personas.get(personas.size() - 1).getNombre());
+            
+            nombrePersona.setEditable(false);
+            alturaPersona.setEditable(false);
+            pesoPersona.setEditable(false);
+            edadPersona.setEditable(false);
+
+        } else if(modificarPersona == true){
+
+            personas.get(jListPersonas.getSelectedIndex()).setNombre(nombrePersona.getText());
+            personas.get(jListPersonas.getSelectedIndex()).setAltura(Double.parseDouble(alturaPersona.getText()));
+            personas.get(jListPersonas.getSelectedIndex()).setPeso(Float.parseFloat(pesoPersona.getText()));
+            personas.get(jListPersonas.getSelectedIndex()).setEdad(Integer.parseInt(edadPersona.getText()));
+            
+            
+            jComboBox3.insertItemAt(personas.get(jListPersonas.getSelectedIndex()).getNombre(), jListPersonas.getSelectedIndex());
+            jComboBox3.removeItemAt(jListPersonas.getSelectedIndex() + 1);
+            
+           
+            
+
+        } else {
+            
+        }
+
+        this.jListRendererPersonas();
+        aniadirPersonaB = false;
+        modificarPersona = false;
+        aniadirPersona.setEnabled(true);
+        borrarPersona.setEnabled(true);
+        modifyPersona.setEnabled(true);
+        modifyPersona.setBackground(colorReset);
+        aniadirPersona.setBackground(colorReset);
+    }
+    
+    public void aniadirGrupo(){
+        nombreGrupo.setEditable(true);
+        directorGrupo.setEditable(true);
+        edadMinimaGrupo.setEditable(true);
+        horarioGrupo.setEditable(true);
+        
+        nombreGrupo.setText("");
+        directorGrupo.setText("");
+        edadMinimaGrupo.setText("");
+        horarioGrupo.setText("");
+       
+
+        modifyGrupo.setEnabled(false);
+        borrarGrupo.setEnabled(false);
+
+        aniadirGrupo.setBackground(Color.GREEN);
+        
+        jComboBox3.setEnabled(true);
+        aniadirGrupoB = true;
+    }
+    
+    public void modifyGrupo(){
+        if(grupos.size() > 0){
+            nombreGrupo.setEditable(true);
+            directorGrupo.setEditable(true);
+            edadMinimaGrupo.setEditable(true);
+            horarioGrupo.setEditable(true);
+
+            modifyGrupo.setBackground(Color.GREEN);
+
+            borrarGrupo.setEnabled(false);
+            aniadirGrupo.setEnabled(false);
+            
+            jComboBox3.setEnabled(true);
+            modificarGrupo= true;
+
+            
+        }
+    }
+    
+    public void borrarGrupo(){
+        Boolean encontrado = false;
+        for(int i  = 0; i < lugares.size();i++){
+            if(lugares.get(i).getGrupo() == grupos.get(jListGrupos.getSelectedIndex()).getNombre()){
+                encontrado = true;
+            }
+        }
+        
+        if(encontrado == false){ 
+            grupos.remove(jListGrupos.getSelectedIndex());
+            jComboBox2.removeItemAt(jListGrupos.getSelectedIndex());
+        }
+        
+        
+        nombreGrupo.setText("");
+        directorGrupo.setText("");
+        edadMinimaGrupo.setText("");
+        horarioGrupo.setText("");
+        
+        this.jListRendererGrupo();
+    }
+    
+    public void mostrarGrupo(){
+        nombreGrupo.setText(grupos.get(jListGrupos.getSelectedIndex()).getNombre());
+        directorGrupo.setText(grupos.get(jListGrupos.getSelectedIndex()).getNombreDirector());
+        edadMinimaGrupo.setText(String.valueOf(grupos.get(jListGrupos.getSelectedIndex()).getEdadMinima()));
+        horarioGrupo.setText(grupos.get(jListGrupos.getSelectedIndex()).getHorario());
+        
+        for(int j = 0; j < personas.size(); j++){
+            if(grupos.get(jListGrupos.getSelectedIndex()).getNombrePersona().equalsIgnoreCase(jComboBox3.getItemAt(j).toString())){  
+                jComboBox3.setSelectedIndex(j);        
+            }
+        }
+    }
+    
+    public void guardarGrupo(){
+        if(aniadirGrupoB == true){
+
+            idGrupos++;
+
+            grupos.add(new Grupo(idGrupos, nombreGrupo.getText(), directorGrupo.getText(), Integer.parseInt(edadMinimaGrupo.getText()), horarioGrupo.getText(), jComboBox3.getItemAt(jComboBox3.getSelectedIndex())));
+                                
+            jComboBox2.addItem(grupos.get(grupos.size() - 1).getNombre());
+                    
+            nombreGrupo.setEditable(false);
+            directorGrupo.setEditable(false);
+            edadMinimaGrupo.setEditable(false);
+            horarioGrupo.setEditable(false);
+            
+
+        } else if(modificarGrupo == true){
+          
+            
+            grupos.get(jListGrupos.getSelectedIndex()).setNombre(nombreGrupo.getText());
+            grupos.get(jListGrupos.getSelectedIndex()).setNombreDirector(directorGrupo.getText());
+            grupos.get(jListGrupos.getSelectedIndex()).setEdadMinima(Integer.parseInt(edadMinimaGrupo.getText()));
+            grupos.get(jListGrupos.getSelectedIndex()).setHorario(horarioGrupo.getText());
+            
+            grupos.get(jListGrupos.getSelectedIndex()).setNombrePersona(jComboBox3.getItemAt(jComboBox3.getSelectedIndex()));
+            
+            jComboBox2.insertItemAt(grupos.get(jListGrupos.getSelectedIndex()).getNombre(), jListGrupos.getSelectedIndex());
+            jComboBox2.removeItemAt(jListGrupos.getSelectedIndex() + 1);
+            
+            
+            
+            
+        }
+
+        this.jListRendererGrupo();
+        aniadirGrupoB = false;
+        modificarGrupo = false;
+        aniadirGrupo.setEnabled(true);
+        borrarGrupo.setEnabled(true);
+        modifyGrupo.setEnabled(true);
+        jComboBox3.setEnabled(false);
+        modifyGrupo.setBackground(colorReset);
+        aniadirGrupo.setBackground(colorReset);
+    }
+    
+    public void aniadirLugar(){
+        nombreLugar.setEditable(true);
+        direccionLugar.setEditable(true);
+        numeroLugar.setEditable(true);
+        horarioLugar.setEditable(true);
+
+        nombreLugar.setText("");
+        direccionLugar.setText("");
+        numeroLugar.setText("");
+        horarioLugar.setText("");
+        
+        modifyLugar.setEnabled(false);
+        borrarLugar.setEnabled(false);
+
+        aniadirLugar.setBackground(Color.GREEN);
+        jComboBox2.setEnabled(true);
+        aniadirLugarB = true;
+    }
+    
+    public void modifyLugar(){
+            nombreLugar.setEditable(true);
+            direccionLugar.setEditable(true);
+            numeroLugar.setEditable(true);
+            horarioLugar.setEditable(true);
+
+            modifyLugar.setBackground(Color.GREEN);
+
+            borrarLugar.setEnabled(false);
+            aniadirLugar.setEnabled(false);
+
+            jComboBox2.setEnabled(true);
+            modificarLugar= true;  
+    }
+    
+    public void borrarLugar(){
+        Boolean encontrado = false;
+        for(int i  = 0; i < ciudades.size();i++){
+            if(ciudades.get(i).getLugar() == lugares.get(jListLugares.getSelectedIndex()).getNombre()){
+                encontrado = true;
+            }
+        }
+        
+        if(encontrado == false){ 
+            lugares.remove(jListLugares.getSelectedIndex());
+            jComboBox1.removeItemAt(jListLugares.getSelectedIndex());
+        }
+        
+
+        nombreLugar.setText("");
+        direccionLugar.setText("");
+        numeroLugar.setText("");
+        horarioLugar.setText("");
+        
+        this.jListRendererLugares();
+    }
+    
+    public void mostrarLugar(){
+        nombreLugar.setText(lugares.get(jListLugares.getSelectedIndex()).getNombre());
+        direccionLugar.setText(lugares.get(jListLugares.getSelectedIndex()).getDireccion());
+        numeroLugar.setText(String.valueOf(lugares.get(jListLugares.getSelectedIndex()).getNumeroEdif()));
+        horarioLugar.setText(lugares.get(jListLugares.getSelectedIndex()).getHorario());
+        
+        for(int j = 0; j < grupos.size(); j++){
+            if(lugares.get(jListLugares.getSelectedIndex()).getGrupo().equalsIgnoreCase(jComboBox2.getItemAt(j).toString())){  
+                jComboBox2.setSelectedIndex(j);        
+            }
+        }
+    }
+    
+    public void guardarLugar(){
+        if(aniadirLugarB == true){
+            
+            idLugares++;
+            lugares.add(new Lugar(idLugares, nombreLugar.getText(), direccionLugar.getText(), Integer.parseInt(numeroLugar.getText()), horarioLugar.getText(), jComboBox2.getItemAt(jComboBox2.getSelectedIndex())));
+               
+            jComboBox1.addItem(lugares.get(lugares.size() - 1).getNombre());
+            
+            nombreLugar.setEditable(false);
+            direccionLugar.setEditable(false);
+            numeroLugar.setEditable(false);
+            horarioLugar.setEditable(false);
+            
+
+        } else if(modificarLugar == true){
+
+            lugares.get(jListLugares.getSelectedIndex()).setNombre(nombreLugar.getText());
+            lugares.get(jListLugares.getSelectedIndex()).setDireccion(direccionLugar.getText());
+            lugares.get(jListLugares.getSelectedIndex()).setNumeroEdif(Integer.parseInt(numeroLugar.getText()));
+            lugares.get(jListLugares.getSelectedIndex()).setHorario(horarioLugar.getText());
+            
+            jComboBox1.insertItemAt(lugares.get(jListLugares.getSelectedIndex()).getNombre(), jListLugares.getSelectedIndex());
+            jComboBox1.removeItemAt(jListLugares.getSelectedIndex() + 1);
+            
+            
+
+        }
+        
+        this.jListRendererLugares();
+        aniadirLugarB = false;
+        modificarLugar = false;
+        aniadirLugar.setEnabled(true);
+        borrarLugar.setEnabled(true);
+        modifyLugar.setEnabled(true);
+        jComboBox2.setEnabled(false);
+        modifyLugar.setBackground(colorReset);
+        aniadirLugar.setBackground(colorReset);
+    }
+    
+    public void aniadirCiudad(){
+        nombreCiudad.setEditable(true);
+        provinciaCiudad.setEditable(true);
+        paisCiudad.setEditable(true);
+        edificioCiudad.setEditable(true);
+
+        nombreCiudad.setText("");
+        provinciaCiudad.setText("");
+        paisCiudad.setText("");
+        edificioCiudad.setText("");
+
+        modifyCiudad.setEnabled(false);
+        borrarCiudad.setEnabled(false);
+
+        aniadirCiudad.setBackground(Color.GREEN);
+        jComboBox1.setEnabled(true);
+        aniadirCiudadB = true;
+    }
+    
+    public void modifyCiudad(){
+        if(ciudades.size() > 0){
+            nombreCiudad.setEditable(true);
+            provinciaCiudad.setEditable(true);
+            paisCiudad.setEditable(true);
+            edificioCiudad.setEditable(true);
+
+            modifyCiudad.setBackground(Color.GREEN);
+
+            borrarCiudad.setEnabled(false);
+            aniadirCiudad.setEnabled(false);
+            jComboBox1.setEnabled(true);
+            modificarCiudad = true;
+        }
+        
+    }
+    
+    public void borrarCiudad(){
+        ciudades.remove(jListCiudad.getSelectedIndex());
+
+        nombreCiudad.setText("");
+        provinciaCiudad.setText("");
+        paisCiudad.setText("");
+        edificioCiudad.setText("");
+
+        this.jListRendererCiudad();
+    }
+    
+    public void mostrarCiudad(){
+        nombreCiudad.setText(ciudades.get(jListCiudad.getSelectedIndex()).getNombre());
+        paisCiudad.setText(ciudades.get(jListCiudad.getSelectedIndex()).getPais());
+        provinciaCiudad.setText(ciudades.get(jListCiudad.getSelectedIndex()).getProvincia());
+        edificioCiudad.setText(ciudades.get(jListCiudad.getSelectedIndex()).getEdificioEmblematico());
+        
+        for(int j = 0; j < lugares.size(); j++){
+            if(ciudades.get(jListCiudad.getSelectedIndex()).getLugar().equalsIgnoreCase(jComboBox1.getItemAt(j).toString())){  
+                jComboBox1.setSelectedIndex(j);        
+            }
+        }
+    }
+    
+    public void guardarCiudad(){
+         if(aniadirCiudadB == true){
+
+            idCiudades++;
+            ciudades.add(new Ciudad(nombreCiudad.getText(), paisCiudad.getText(), provinciaCiudad.getText(), edificioCiudad.getText(), idCiudades, jComboBox1.getItemAt(jComboBox1.getSelectedIndex())));
+
+            nombreCiudad.setEditable(false);
+            paisCiudad.setEditable(false);
+            provinciaCiudad.setEditable(false);
+            edificioCiudad.setEditable(false);
+
+        } else if(modificarCiudad == true){
+
+            ciudades.get(jListCiudad.getSelectedIndex()).setNombre(nombreCiudad.getText());
+            ciudades.get(jListCiudad.getSelectedIndex()).setPais(paisCiudad.getText());
+            ciudades.get(jListCiudad.getSelectedIndex()).setProvincia(provinciaCiudad.getText());
+            ciudades.get(jListCiudad.getSelectedIndex()).setEdificioEmblematico(edificioCiudad.getText());
+
+        }
+
+        this.jListRendererCiudad();
+        aniadirCiudadB = false;
+        modificarCiudad = false;
+        aniadirCiudad.setEnabled(true);
+        borrarCiudad.setEnabled(true);
+        modifyCiudad.setEnabled(true);
+        jComboBox1.setEnabled(false);
+        modifyCiudad.setBackground(colorReset);
+        aniadirCiudad.setBackground(colorReset);
+    }
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) throws IOException, FileNotFoundException, ClassNotFoundException {
         Ventana nuevaVentana = new Ventana();
-        System.out.println("yeye");
+        
         nuevaVentana.leerPersonas();
         nuevaVentana.leerGrupos();
         nuevaVentana.leerLugares();
         nuevaVentana.leerCiudades();
-        System.out.println("yeye");
+        
         nuevaVentana.setVisible(true);
    }
 
