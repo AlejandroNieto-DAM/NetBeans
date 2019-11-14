@@ -13,6 +13,22 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -1090,198 +1106,219 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     public void guardarPersonas() throws IOException{
-        File ficheroBorrar = new File("FichPersona.dat");
-        ficheroBorrar.delete();
-        File fichero = new File("FichPersona.dat");
-        FileOutputStream fileout = new FileOutputStream(fichero,true);  
-        ObjectOutputStream dataOS = new ObjectOutputStream(fileout);  
+        DocumentBuilderFactory factory =
+                   DocumentBuilderFactory.newInstance();
 
-        
-        for (int i=0;i < personas.size(); i++){ //recorro los arrays    
-	  
-            dataOS.writeObject(personas.get(i)); //escribo la persona en el fichero
-            //System.out.println("GRABO LOS DATOS DE PERSONA.");  
-               
-        }     
-        
-        dataOS.close();  //cerrar stream de salida   
+    try{
+      DocumentBuilder builder = factory.newDocumentBuilder();
+      DOMImplementation implementation = builder.getDOMImplementation();
+      Document document = 
+           implementation.createDocument(null, "personas", null);
+      document.setXmlVersion("1.0"); 
+
+      for(int i = 0; i < grupos.size(); i++) {
+          
+          
+
+          //id validos a partir de 1
+            Element raiz = 
+                    document.createElement("persona"); //nodo empleado
+          document.getDocumentElement().appendChild(raiz); 
+
+          CrearElemento("id", String.valueOf(personas.get(i).getId()) , raiz, document);                        
+          CrearElemento("nombre", personas.get(i).getNombre() , raiz, document); 
+          CrearElemento("altura", String.valueOf(personas.get(i).getAltura()) , raiz, document); 
+          CrearElemento("peso", String.valueOf(personas.get(i).getPeso()) , raiz, document); 
+          CrearElemento("edad", String.valueOf(personas.get(i).getEdad()) , raiz, document); 
+          
+      }//fin del for que recorre el fichero
+
+      Source source = new DOMSource(document);
+      Result result = 
+             new StreamResult(new java.io.File("Personas.xml"));        
+      Transformer transformer =
+             TransformerFactory.newInstance().newTransformer();
+      transformer.transform(source, result);
+
+     }catch(Exception e){ System.err.println("Error: "+e); }   
         
         
     }
 
-    public void leerPersonas() throws FileNotFoundException, IOException, ClassNotFoundException, EOFException{
-        Persona persona;// defino la variable persona
-        File fichero = new File("FichPersona.dat");
+    public void leerPersonas() throws FileNotFoundException, IOException, ClassNotFoundException, EOFException, SAXException{
+        XMLReader  procesadorXML = XMLReaderFactory.createXMLReader();
+	GestionContenidoPersonas gestor= new GestionContenidoPersonas();  
+        gestor.setArray(personas);
+	procesadorXML.setContentHandler(gestor);
+ 	InputSource fileXML = new InputSource("Personas.xml");	    
+        procesadorXML.parse(fileXML);
         
-        if(fichero.length() > 0){
-        
-            ObjectInputStream dataIS = new ObjectInputStream(new FileInputStream(fichero));
-
-
-            try {
-
-                while (true) { // lectura del fichero
-                    persona = (Persona) dataIS.readObject(); // leer una Persona
-                    personas.add(new Persona(persona.getNombre(), persona.getAltura(), persona.getPeso(), persona.getEdad(), persona.getId()));
-                    jComboBox3.addItem(persona.getNombre());
-                    //System.out.println("leooo");
-                }
-
-            } catch (EOFException eo) {
-                    //System.out.println("FIN DE LECTURA.");
-            } catch (StreamCorruptedException x) {
-            }
-
-
-            dataIS.close();
+        for(int i = 0; i < personas.size(); i++){
+            jComboBox3.addItem(personas.get(i).getNombre());
         }
         
         this.jListRendererPersonas();
     }
     
     public void guardarGrupos() throws FileNotFoundException, IOException{
-        File ficheroBorrar = new File("FichGrupo.dat");
-        ficheroBorrar.delete();
-        File fichero = new File("FichGrupo.dat");
-        FileOutputStream fileout = new FileOutputStream(fichero,true);  
-        ObjectOutputStream dataOS = new ObjectOutputStream(fileout);  
+        DocumentBuilderFactory factory =
+                   DocumentBuilderFactory.newInstance();
 
-        
-        for (int i=0;i < grupos.size(); i++){ //recorro los arrays    
-	  
-            dataOS.writeObject(grupos.get(i)); //escribo la persona en el fichero
-            //System.out.println("GRABO LOS DATOS DE PERSONA.");  
-               
-        }     
-        
-        dataOS.close();  //cerrar stream de salida   
+    try{
+      DocumentBuilder builder = factory.newDocumentBuilder();
+      DOMImplementation implementation = builder.getDOMImplementation();
+      Document document = 
+           implementation.createDocument(null, "grupos", null);
+      document.setXmlVersion("1.0"); 
+
+      for(int i = 0; i < grupos.size(); i++) {
+          
+          
+
+          //id validos a partir de 1
+            Element raiz = 
+                    document.createElement("grupo"); //nodo empleado
+          document.getDocumentElement().appendChild(raiz); 
+
+          CrearElemento("id", String.valueOf(grupos.get(i).getId()) , raiz, document);                        
+          CrearElemento("nombre", grupos.get(i).getNombre() , raiz, document); 
+          CrearElemento("nombreDirector", grupos.get(i).getNombreDirector() , raiz, document); 
+          CrearElemento("edadMinima", String.valueOf(grupos.get(i).getEdadMinima()) , raiz, document); 
+          CrearElemento("horario", grupos.get(i).getHorario() , raiz, document); 
+          CrearElemento("nombrePersona", grupos.get(i).getNombrePersona() , raiz, document); 
+          
+      }//fin del for que recorre el fichero
+
+      Source source = new DOMSource(document);
+      Result result = 
+             new StreamResult(new java.io.File("Grupos.xml"));        
+      Transformer transformer =
+             TransformerFactory.newInstance().newTransformer();
+      transformer.transform(source, result);
+
+     }catch(Exception e){ System.err.println("Error: "+e); } 
         
         
     }
     
-    public void leerGrupos() throws FileNotFoundException, IOException, ClassNotFoundException{
-        Grupo grupo;// defino la variable persona
-        File fichero = new File("FichGrupo.dat");
+    public void leerGrupos() throws FileNotFoundException, IOException, ClassNotFoundException, SAXException{
+        XMLReader  procesadorXML = XMLReaderFactory.createXMLReader();
+	GestionContenidoGrupos gestor= new GestionContenidoGrupos();  
+        gestor.setArray(grupos);
+	procesadorXML.setContentHandler(gestor);
+ 	InputSource fileXML = new InputSource("Grupos.xml");	    
+        procesadorXML.parse(fileXML);
         
-        if(fichero.length() > 0){
-        
-            ObjectInputStream dataIS = new ObjectInputStream(new FileInputStream(fichero));
-
-
-            try {
-
-                while (true) { // lectura del fichero
-                    grupo = (Grupo) dataIS.readObject(); // leer una Persona
-                    grupos.add(new Grupo(grupo.getId(), grupo.getNombre(), grupo.getNombreDirector(), grupo.getEdadMinima(), grupo.getHorario(), grupo.getNombrePersona()));
-                    jComboBox2.addItem(grupo.getNombre());
-                    //System.out.println("leooo");
-                }
-
-            } catch (EOFException eo) {
-                    //System.out.println("FIN DE LECTURA.");
-            } catch (StreamCorruptedException x) {
-            }
-
-
-            dataIS.close();
+        for(int i = 0; i < grupos.size(); i++){
+            jComboBox2.addItem(grupos.get(i).getNombre());
         }
         
         this.jListRendererGrupo();
     }
     
     public void guardarLugares() throws IOException{
-        File ficheroBorrar = new File("FichLugar.dat");
-        ficheroBorrar.delete();
-        File fichero = new File("FichLugar.dat");
-        FileOutputStream fileout = new FileOutputStream(fichero,true);  
-        ObjectOutputStream dataOS = new ObjectOutputStream(fileout);  
+        DocumentBuilderFactory factory =
+                   DocumentBuilderFactory.newInstance();
 
-        
-        for (int i=0;i < lugares.size(); i++){ //recorro los arrays    
-	  
-            dataOS.writeObject(lugares.get(i)); //escribo la persona en el fichero
-            //System.out.println("GRABO LOS DATOS DE PERSONA.");  
-               
-        }     
-        
-        dataOS.close();  //cerrar stream de salida   
+    try{
+      DocumentBuilder builder = factory.newDocumentBuilder();
+      DOMImplementation implementation = builder.getDOMImplementation();
+      Document document = 
+           implementation.createDocument(null, "lugares", null);
+      document.setXmlVersion("1.0"); 
+
+      for(int i = 0; i < lugares.size(); i++) {
+          
+          
+
+          //id validos a partir de 1
+            Element raiz = 
+                    document.createElement("lugar"); //nodo empleado
+          document.getDocumentElement().appendChild(raiz); 
+
+          CrearElemento("id", String.valueOf(lugares.get(i).getId()) , raiz, document);                        
+          CrearElemento("nombre", lugares.get(i).getNombre() , raiz, document); 
+          CrearElemento("direccion", lugares.get(i).getDireccion() , raiz, document); 
+          CrearElemento("numeroEdif", String.valueOf(lugares.get(i).getNumeroEdif()) , raiz, document); 
+          CrearElemento("horario", lugares.get(i).getHorario() , raiz, document); 
+          CrearElemento("grupo", lugares.get(i).getGrupo() , raiz, document); 
+          
+      }//fin del for que recorre el fichero
+
+      Source source = new DOMSource(document);
+      Result result = 
+             new StreamResult(new java.io.File("Lugares.xml"));        
+      Transformer transformer =
+             TransformerFactory.newInstance().newTransformer();
+      transformer.transform(source, result);
+
+     }catch(Exception e){ System.err.println("Error: "+e); }  
         
     }
     
-    public void leerLugares() throws FileNotFoundException, IOException, ClassNotFoundException{
-        Lugar lugar;// defino la variable persona
-        File fichero = new File("FichLugar.dat");
+    public void leerLugares() throws FileNotFoundException, IOException, ClassNotFoundException, SAXException{
         
-        if(fichero.length() > 0){
+        XMLReader  procesadorXML = XMLReaderFactory.createXMLReader();
+	GestionContenidoLugares gestor= new GestionContenidoLugares();  
+        gestor.setArray(lugares);
+	procesadorXML.setContentHandler(gestor);
+ 	InputSource fileXML = new InputSource("Lugares.xml");	    
+        procesadorXML.parse(fileXML);
         
-            ObjectInputStream dataIS = new ObjectInputStream(new FileInputStream(fichero));
-
-
-            try {
-
-                while (true) { // lectura del fichero
-                    lugar = (Lugar) dataIS.readObject(); // leer una Persona
-                    lugares.add(new Lugar(lugar.getId(), lugar.getNombre(), lugar.getDireccion(), lugar.getNumeroEdif(), lugar.getHorario(), lugar.getGrupo()));
-                    jComboBox1.addItem(lugar.getNombre());
-                    //System.out.println("leooo");
-                }
-
-            } catch (EOFException eo) {
-                    //System.out.println("FIN DE LECTURA.");
-            } catch (StreamCorruptedException x) {
-            }
-
-
-            dataIS.close();
+        for(int i = 0; i < lugares.size(); i++){
+            jComboBox1.addItem(lugares.get(i).getNombre());
         }
         
         this.jListRendererLugares();
     }
     
     public void guardarCiudades() throws FileNotFoundException, IOException{
-        File ficheroBorrar = new File("FichCiudad.dat");
-        ficheroBorrar.delete();
-        File fichero = new File("FichCiudad.dat");
-        FileOutputStream fileout = new FileOutputStream(fichero,true);  
-        ObjectOutputStream dataOS = new ObjectOutputStream(fileout);  
+        DocumentBuilderFactory factory =
+                   DocumentBuilderFactory.newInstance();
 
-        
-        for (int i=0;i < ciudades.size(); i++){ //recorro los arrays    
-	  
-            dataOS.writeObject(ciudades.get(i)); //escribo la persona en el fichero
-            //System.out.println("GRABO LOS DATOS DE PERSONA.");  
-               
-        }     
-        
-        dataOS.close();  //cerrar stream de salida 
+    try{
+      DocumentBuilder builder = factory.newDocumentBuilder();
+      DOMImplementation implementation = builder.getDOMImplementation();
+      Document document = 
+           implementation.createDocument(null, "ciudades", null);
+      document.setXmlVersion("1.0"); 
+
+      for(int i = 0; i < ciudades.size(); i++) {
+          
+          
+
+          //id validos a partir de 1
+            Element raiz = 
+                    document.createElement("ciudad"); //nodo empleado
+          document.getDocumentElement().appendChild(raiz); 
+
+          CrearElemento("id", String.valueOf(ciudades.get(i).getId()) , raiz, document);                        
+          CrearElemento("nombre", ciudades.get(i).getNombre() , raiz, document); 
+          CrearElemento("pais", ciudades.get(i).getPais() , raiz, document); 
+          CrearElemento("provincia", ciudades.get(i).getProvincia() , raiz, document); 
+          CrearElemento("edificioEmblematico", ciudades.get(i).getEdificioEmblematico() , raiz, document); 
+          CrearElemento("lugar", ciudades.get(i).getLugar() , raiz, document); 
+          
+      }//fin del for que recorre el fichero
+
+      Source source = new DOMSource(document);
+      Result result = 
+             new StreamResult(new java.io.File("Ciudades.xml"));        
+      Transformer transformer =
+             TransformerFactory.newInstance().newTransformer();
+      transformer.transform(source, result);
+
+     }catch(Exception e){ System.err.println("Error: "+e); }
     }
     
-    public void leerCiudades() throws FileNotFoundException, IOException, ClassNotFoundException{
-        Ciudad ciudad;// defino la variable persona
-        File fichero = new File("FichCiudad.dat");
-        
-        if(fichero.length() > 0){
-        
-            ObjectInputStream dataIS = new ObjectInputStream(new FileInputStream(fichero));
-
-
-            try {
-
-                while (true) { // lectura del fichero
-                    ciudad = (Ciudad) dataIS.readObject(); // leer una Persona
-                    ciudades.add(new Ciudad( ciudad.getNombre(), ciudad.getPais(), ciudad.getProvincia(), ciudad.getEdificioEmblematico(), ciudad.getId(), ciudad.getLugar()));
-                    
-                }
-
-            } catch (EOFException eo) {
-                    //System.out.println("FIN DE LECTURA.");
-            } catch (StreamCorruptedException x) {
-            }
-
-
-            dataIS.close();
-        }
-        
+    public void leerCiudades() throws FileNotFoundException, IOException, ClassNotFoundException, SAXException{
+        XMLReader  procesadorXML = XMLReaderFactory.createXMLReader();
+	GestionContenidoCiudad gestor= new GestionContenidoCiudad();  
+        gestor.setArray(ciudades);
+	procesadorXML.setContentHandler(gestor);
+ 	InputSource fileXML = new InputSource("Ciudades.xml");	    
+        procesadorXML.parse(fileXML);
+          
         this.jListRendererCiudad();
     }
     
@@ -1756,16 +1793,25 @@ public class Ventana extends javax.swing.JFrame {
     public int getLugaresDim(){
         return lugares.size();
     }
+    
+    static void  CrearElemento(String datoEmple, String valor,
+                               Element raiz, Document document){
+       Element elem = document.createElement(datoEmple); 
+       Text text = document.createTextNode(valor); //damos valor
+       raiz.appendChild(elem); //pegamos el elemento hijo a la raiz
+       elem.appendChild(text); //pegamos el valor		 	
+    }
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) throws IOException, FileNotFoundException, ClassNotFoundException {
+    public static void main(String args[]) throws IOException, FileNotFoundException, ClassNotFoundException, SAXException {
         Ventana nuevaVentana = new Ventana();
         
         nuevaVentana.leerPersonas();
         nuevaVentana.leerGrupos();
-        nuevaVentana.leerLugares();
         nuevaVentana.leerCiudades();
+        
+        nuevaVentana.leerLugares();
         
         nuevaVentana.setVisible(true);
    }
