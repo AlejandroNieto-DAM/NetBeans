@@ -1729,6 +1729,8 @@ public class Ventana extends javax.swing.JFrame {
             lugares.get(jListLugares.getSelectedIndex()).setNumeroEdif(Integer.parseInt(numeroLugar.getText()));
             lugares.get(jListLugares.getSelectedIndex()).setHorario(horarioLugar.getText());
             
+            lugares.get(jListLugares.getSelectedIndex()).setGrupo(jComboBox2.getItemAt(jComboBox2.getSelectedIndex()));
+
             jComboBox1.insertItemAt(lugares.get(jListLugares.getSelectedIndex()).getNombre(), jListLugares.getSelectedIndex());
             jComboBox1.removeItemAt(jListLugares.getSelectedIndex() + 1);
             
@@ -1865,6 +1867,8 @@ public class Ventana extends javax.swing.JFrame {
             ciudades.get(jListCiudad.getSelectedIndex()).setPais(paisCiudad.getText());
             ciudades.get(jListCiudad.getSelectedIndex()).setProvincia(provinciaCiudad.getText());
             ciudades.get(jListCiudad.getSelectedIndex()).setEdificioEmblematico(edificioCiudad.getText());
+            ciudades.get(jListCiudad.getSelectedIndex()).setLugar(jComboBox1.getItemAt(jComboBox1.getSelectedIndex()));
+
             
             ConnectToBD conexion = new ConnectToBD();
             
