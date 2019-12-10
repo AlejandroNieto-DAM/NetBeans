@@ -1351,10 +1351,8 @@ public class Ventana extends javax.swing.JFrame {
     public void borrarPersona(){
         Boolean encontrado = false; 
         for(int i = 0; i < grupos.size(); i++){
-            if(personas.get(jListPersonas.getSelectedIndex()).getNombre().equals(grupos.get(i).getNombrePersona())){
-
+            if(grupos.get(i).getNombrePersona().equals(personas.get(jListPersonas.getSelectedIndex()).getNombre())){
                 encontrado = true;
-
             }
         }
 
@@ -1937,6 +1935,14 @@ public class Ventana extends javax.swing.JFrame {
                 
     }
     
+    public int getCiudadesDim(){
+        return ciudades.size();   
+    }
+    
+    public Ciudad getCiudad(int index){
+        return ciudades.get(index);
+    }
+    
     public void crearNuevaPersona(String nombre, Double altura, Float peso, int edad) throws SQLException{
         idPersonas++;
         personas.add(new Persona(nombre, altura, peso, edad, idPersonas));
@@ -1966,7 +1972,8 @@ public class Ventana extends javax.swing.JFrame {
                System.out.println("Excepcion de feooooos!" + e);
            }
             
-        conexion.getConnector().close();        
+        conexion.getConnector().close(); 
+              
     }
     
     public Persona getPersona(int index){
@@ -2003,7 +2010,7 @@ public class Ventana extends javax.swing.JFrame {
 
            }
            catch (Exception e){
-               System.out.println("Excepcion de feooooos!");
+               System.out.println("No ha sido posible insertar en la base de datos!" + e);
            }
 
     }
@@ -2042,7 +2049,7 @@ public class Ventana extends javax.swing.JFrame {
 
            }
            catch (Exception e){
-               System.out.println("Excepcion de feooooos!");
+               System.out.println("No ha sido posible insertar en la base de datos!" + e);
            }
     }
     
