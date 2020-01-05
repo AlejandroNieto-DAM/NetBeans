@@ -1,13 +1,8 @@
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import java.util.Properties;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,16 +14,26 @@ import java.util.logging.Logger;
  *
  * @author alejandronieto
  */
-public class ConectorBD {
- 
-    private String conector = "jdbc";
-    private String port = "3306";
-    private String ip = "localhost";
-    private String dbName = "insti";
-    private String database = "mysql";
+public class ConnectToBD {
     
-    private String user = "root";
-    private String passwd = "cristorey";
+    private String conector;
+    private String port;
+    private String ip;
+    private String dbName;
+    private String database;
+    
+    private String user;
+    private String passwd;
+    
+    ConnectToBD(){
+        conector = "jdbc";
+        port = "3306";
+        ip = "clasedam2.ddns.net";
+        dbName = "cristomessenger";
+        database = "mysql";
+        user = "clasedam2";
+        passwd = "root";
+    }
     
     
     //******** SETS ********//
@@ -92,41 +97,24 @@ public class ConectorBD {
         return passwd;
     }
     
-    
-    
-    public Connection getConnector() throws SQLException{
-        
-        Connection con = DriverManager.getConnection(conector + ":" + database + "://" + ip + ":" + port + "/" + dbName,user, passwd);
+    public Connection getConnector() throws SQLException {
 
-        return con;
-        
-    }
-    
-    public static void viewTable(Connection con, String dbName, String query, ArrayList alumnos) throws SQLException {
+        Connection conn = null;
+        Properties connectionProps = new Properties();
+        connectionProps.put("user", this.getDBUser());
+        connectionProps.put("password", this.getDBPasswd());
 
-        Statement stmt = null;
-
-        try {
-            stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()) {
-
-                String dni = rs.getString("DNI");
-                String nombre = rs.getString("nom_alum");
-
-                Alumno auxiliar = new Alumno();
-
-                auxiliar.setDNI(dni);
-                auxiliar.setNomAlum(nombre);
-
-                alumnos.add(auxiliar);
-
-
-            }
-        } catch (SQLException e ) {
-            System.out.println(e);
-        } finally {
-            if (stmt != null) { stmt.close(); }
+        if (this.getDataBase().equals("mysql")) {
+            conn = DriverManager.getConnection("jdbc:" + this.getDataBase() + "://" + this.getIP() + ":" + this.getPort() + "/" + this.getDBName(), connectionProps);
+        } else if (this.getDataBase().equals("derby")) {
+            conn = DriverManager.getConnection("jdbc:" + this.getDataBase() + ":" + this.getDBName() + ";create=true",connectionProps);
         }
-    }   
+        
+        CristoMessenger.returnException("Connected to database");
+        return conn;
+    }
+        
 }
+
+    
+

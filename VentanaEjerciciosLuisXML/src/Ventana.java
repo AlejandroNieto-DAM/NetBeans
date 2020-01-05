@@ -1371,7 +1371,7 @@ public class Ventana extends javax.swing.JFrame {
     public void borrarPersona(){
         Boolean encontrado = false; 
         for(int i = 0; i < grupos.size(); i++){
-            if(personas.get(jListPersonas.getSelectedIndex()).getNombre() == grupos.get(i).getNombrePersona()){
+            if(personas.get(jListPersonas.getSelectedIndex()).getNombre().equals(grupos.get(i).getNombrePersona())){
 
                 encontrado = true;
 
