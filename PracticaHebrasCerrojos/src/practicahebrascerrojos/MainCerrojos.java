@@ -20,7 +20,7 @@ public class MainCerrojos {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         // TODO code application logic here
         
         tamanioBuffer = Integer.parseInt(args[0]);
@@ -45,6 +45,14 @@ public class MainCerrojos {
         for(int i = 0; i < numHebrasConsumidoras; i++){
             hebrasConsumidoras[i] = new HebraConsumidora( String.valueOf(i), terminanHebrasConsumidoras, myBuffer);
             hebrasConsumidoras[i].mythread.start();
+        }
+        
+        for(int i = 0; i < numHebrasProductoras; i++){
+            hebrasProductoras[i].mythread.join();
+        }
+        
+        for(int i = 0; i < numHebrasConsumidoras; i++){
+            hebrasConsumidoras[i].mythread.join();
         }
         
     }

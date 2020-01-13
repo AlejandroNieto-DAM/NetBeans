@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 13-ene-2020 14:19:35 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sqlite.Ciudades" table="Ciudades" catalog="hibernate" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" />
+        </property>
+        <property name="pais" type="string">
+            <column name="pais" length="50" />
+        </property>
+        <property name="provincia" type="string">
+            <column name="provincia" length="50" />
+        </property>
+        <property name="edificioEmblematico" type="string">
+            <column name="edificioEmblematico" length="50" />
+        </property>
+        <property name="lugar" type="string">
+            <column name="lugar" length="50" />
+        </property>
+    </class>
+</hibernate-mapping>

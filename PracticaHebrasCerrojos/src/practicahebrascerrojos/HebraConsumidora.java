@@ -5,6 +5,9 @@
  */
 package practicahebrascerrojos;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author alejandronieto
@@ -28,11 +31,19 @@ public class HebraConsumidora implements Runnable {
     public void run() {
         if(termina == 0){
             while(true){
-                buffer.consumir(id);
+                try {
+                    buffer.consumir(id);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(HebraConsumidora.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             
         } else {
-            buffer.consumir(id);
+            try {
+                buffer.consumir(id);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(HebraConsumidora.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }

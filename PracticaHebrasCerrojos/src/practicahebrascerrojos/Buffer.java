@@ -18,9 +18,7 @@ public class Buffer {
     
     int[] buffer;
     
-    Lock lock;
-    Condition lleno;
-    Condition vacio;
+ 
     
     int entrada;
     int salida;
@@ -45,9 +43,6 @@ public class Buffer {
             buffer[i] = 0;
         }
         
-        lock = new ReentrantLock();
-        lleno = lock.newCondition();
-        vacio = lock.newCondition();
         entrada = 0;
         salida = 0;
         
@@ -55,11 +50,10 @@ public class Buffer {
         contador = 0;
     }
     
-    public void consumir(String id) throws InterruptedException{
+    public synchronized void consumir(String id) throws InterruptedException{
         
-        lock.lock();
         while(contador == 0){
-            vacio.await();
+            wait();
         }
             
         buffer[salida] = 0;
@@ -68,18 +62,16 @@ public class Buffer {
         salida = (salida + 1) % tamanioBuffer;
         contador = contador - 1;
         
-        lleno.signalAll();
-        lock.unlock();
+        notifyAll();
         
         
     }
     
-    public void producir(String id) throws InterruptedException{
+    public synchronized void producir(String id) throws InterruptedException{
         
         
-        lock.lock();
         while(contador == tamanioBuffer){
-            lleno.await();
+            wait();
         }
         
         buffer[entrada] = 1;
@@ -88,8 +80,7 @@ public class Buffer {
         entrada = (entrada + 1) % tamanioBuffer;
         contador = contador + 1;
         
-        vacio.signalAll();
-        lock.unlock();
+        notifyAll();
        
     }
     
