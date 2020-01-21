@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-ene-2020 14:20:42 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sqlite.Grupo" table="grupo" catalog="prueba1" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="persona" class="sqlite.Persona" fetch="select">
+            <column name="personaId" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" />
+        </property>
+        <property name="nombreDirector" type="string">
+            <column name="nombreDirector" length="50" />
+        </property>
+        <property name="edadMinima" type="java.lang.Integer">
+            <column name="edadMinima" />
+        </property>
+        <property name="horario" type="string">
+            <column name="horario" length="50" />
+        </property>
+        <set name="lugars" table="lugar" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="grupoId" />
+            </key>
+            <one-to-many class="sqlite.Lugar" />
+        </set>
+    </class>
+</hibernate-mapping>
