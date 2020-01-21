@@ -1,3 +1,5 @@
+package sqlite;
+
 
 import java.awt.Component;
 import java.awt.Image;

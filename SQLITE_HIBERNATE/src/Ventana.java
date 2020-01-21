@@ -7,9 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
@@ -29,10 +34,10 @@ import sqlite.*;
  */
 public class Ventana extends javax.swing.JFrame {
     
-    private ArrayList<Personas> personas;
-    private ArrayList<Ciudades> ciudades;
-    private ArrayList<Grupos> grupos;
-    private ArrayList<Lugares> lugares;
+    private ArrayList<Persona> personas;
+    private ArrayList<Ciudad> ciudades;
+    private ArrayList<Grupo> grupos;
+    private ArrayList<Lugar> lugares;
     
   
     
@@ -55,6 +60,9 @@ public class Ventana extends javax.swing.JFrame {
     private int idGrupos;
     private int idLugares;
     private int idCiudades;
+    Transaction t;
+    Session s;
+    
     
     
    
@@ -66,10 +74,12 @@ public class Ventana extends javax.swing.JFrame {
     public Ventana() throws IOException, FileNotFoundException, ClassNotFoundException {
         initComponents();
         
+        s = NewHibernateUtil.getSessionFactory().openSession();
+        
         personas = new ArrayList();
-        ciudades = new ArrayList();
-        lugares = new ArrayList();
         grupos = new ArrayList();
+        lugares = new ArrayList();
+        ciudades = new ArrayList();
         
         aniadirPersonaB = false;
         modificarPersona = false;
@@ -1101,8 +1111,16 @@ public class Ventana extends javax.swing.JFrame {
     }
 
     public void leerPersonas() throws SQLException{
+                
+        List<Persona> personas2;
+        personas2 =  s.createQuery("FROM Persona").setReadOnly(true).list();
         
-        //TODO Leer Personas
+        if(personas2.size() != 0){
+            for( Persona auxiliar : personas2){
+            personas.add(auxiliar);
+        }
+        }
+        
         
         for(int i = 0; i < personas.size(); i++){
             jComboBox3.addItem(personas.get(i).getNombre());
@@ -1119,8 +1137,14 @@ public class Ventana extends javax.swing.JFrame {
     
     public void leerGrupos() throws FileNotFoundException, IOException, ClassNotFoundException, SAXException, SQLException{
        
-        //TODO Leer Grupos
+       
         
+        List<Grupo> grupos2;
+        grupos2 =  s.createQuery("FROM Grupo").setReadOnly(true).list();
+        
+        for( Grupo auxiliar : grupos2){
+            grupos.add(auxiliar);
+        }
         for(int i = 0; i < grupos.size(); i++){
             jComboBox2.addItem(grupos.get(i).getNombre());
         }
@@ -1135,7 +1159,12 @@ public class Ventana extends javax.swing.JFrame {
     
     public void leerLugares() throws FileNotFoundException, IOException, ClassNotFoundException, SAXException, SQLException{
         
-        //TODO Leer lugares
+        List<Lugar> lugares2;
+        lugares2 =  s.createQuery("FROM Lugar").setReadOnly(true).list();
+        
+        for( Lugar auxiliar : lugares2){
+            lugares.add(auxiliar);
+        }
         
         for(int i = 0; i < lugares.size(); i++){
             jComboBox1.addItem(lugares.get(i).getNombre());
@@ -1153,7 +1182,12 @@ public class Ventana extends javax.swing.JFrame {
     
     public void leerCiudades() throws FileNotFoundException, IOException, ClassNotFoundException, SAXException, SQLException{
 
-        //TODO Leer Ciudades
+        List<Ciudad> ciudades2;
+        ciudades2 =  s.createQuery("FROM Ciudad").setReadOnly(true).list();
+        
+        for( Ciudad auxiliar : ciudades2){
+            ciudades.add(auxiliar);
+        }
         
         this.jListRendererCiudad();
     }
@@ -1207,35 +1241,25 @@ public class Ventana extends javax.swing.JFrame {
     public void borrarPersona(){
         Boolean encontrado = false; 
         for(int i = 0; i < grupos.size(); i++){
-            if(grupos.get(i).getNombrePersona().equals(personas.get(jListPersonas.getSelectedIndex()).getNombre())){
+            if(grupos.get(i).getPersona().getNombre().equals(personas.get(jListPersonas.getSelectedIndex()).getNombre())){
                 encontrado = true;
             }
         }
 
         if(encontrado == false){
-            
-            
-            try{
 
-               String query = " DELETE FROM Personas WHERE id = " + personas.get(jListPersonas.getSelectedIndex()).getId();
-
-               PreparedStatement preparedStmt = conexion.getConnector().prepareStatement(query);
- 
-               preparedStmt.execute();
-
-               conexion.getConnector().close();   
-               personas.remove(jListPersonas.getSelectedIndex());
-               jComboBox3.removeItemAt(jListPersonas.getSelectedIndex());
-
-           }
-           catch (Exception e){
-               System.out.println("Excepcion de feooooos en el borrar!" + e);
-           
+            t = s.beginTransaction();
             
-           }
-            
-            
-            
+            Persona persona = (Persona) s.get(Persona.class, personas.get(jListPersonas.getSelectedIndex()).getId());
+            if (persona != null) {
+                s.delete(persona);
+                System.out.println("eliminao");
+            }
+            t.commit();
+       
+            personas.remove(jListPersonas.getSelectedIndex());
+            jComboBox3.removeItemAt(jListPersonas.getSelectedIndex());
+      
         }  else {
             JOptionPane.showMessageDialog(null, "Esta persona tiene grupos asociados, primero elimina esos grupos!");
         }
@@ -1260,7 +1284,7 @@ public class Ventana extends javax.swing.JFrame {
     public void guardarPersona() throws SQLException{
         if(aniadirPersonaB == true){
 
-            this.crearNuevaPersona(nombrePersona.getText(), Double.parseDouble(alturaPersona.getText()), Float.parseFloat(pesoPersona.getText()), Integer.parseInt(edadPersona.getText()));
+            this.crearNuevaPersona(nombrePersona.getText(), Double.parseDouble(alturaPersona.getText()), Double.parseDouble(pesoPersona.getText()), Integer.parseInt(edadPersona.getText()));
             jComboBox3.addItem(personas.get(personas.size() - 1).getNombre());
             
             nombrePersona.setEditable(false);
@@ -1272,30 +1296,32 @@ public class Ventana extends javax.swing.JFrame {
 
             personas.get(jListPersonas.getSelectedIndex()).setNombre(nombrePersona.getText());
             personas.get(jListPersonas.getSelectedIndex()).setAltura(Double.parseDouble(alturaPersona.getText()));
-            personas.get(jListPersonas.getSelectedIndex()).setPeso(Float.parseFloat(pesoPersona.getText()));
+            personas.get(jListPersonas.getSelectedIndex()).setPeso(Double.parseDouble(pesoPersona.getText()));
             personas.get(jListPersonas.getSelectedIndex()).setEdad(Integer.parseInt(edadPersona.getText()));
             
+            s.close();
+            try { 
+            Session s1 = NewHibernateUtil.getSessionFactory().openSession();
+                t = s1.beginTransaction(); 
+                s1.update(personas.get(jListPersonas.getSelectedIndex()));
+                t.commit();
+         
+                s1.close();
+            }catch (HibernateException e) { 
+                        e.printStackTrace(System.err); 
+                        if (t != null) { 
+                                t.rollback(); 
+                        }
+            }
             
+            s = NewHibernateUtil.getSessionFactory().openSession();
+            
+  
+                    
             jComboBox3.insertItemAt(personas.get(jListPersonas.getSelectedIndex()).getNombre(), jListPersonas.getSelectedIndex());
             jComboBox3.removeItemAt(jListPersonas.getSelectedIndex() + 1);
             
-            ConnectToBD conexion = new ConnectToBD();
             
-            try{
-
-               String query = " UPDATE Personas SET nombre = '" + String.valueOf(personas.get(jListPersonas.getSelectedIndex()).getNombre()) + "', altura = " + personas.get(jListPersonas.getSelectedIndex()).getAltura() + ", peso = " + personas.get(jListPersonas.getSelectedIndex()).getAltura() + ", edad = " + personas.get(jListPersonas.getSelectedIndex()).getEdad() + " WHERE id = " + personas.get(jListPersonas.getSelectedIndex()).getId() ;
-
-               PreparedStatement preparedStmt = conexion.getConnector().prepareStatement(query);
-
-               
-               preparedStmt.execute();
-
-             conexion.getConnector().close();        
-
-           }
-           catch (Exception e){
-               System.out.println("Excepcion de feooooos en el modify!" + e);
-           }
             
         }
 
@@ -1308,6 +1334,7 @@ public class Ventana extends javax.swing.JFrame {
         modifyPersona.setBackground(colorReset);
         aniadirPersona.setBackground(colorReset);
     }
+    
     
     public void aniadirGrupo(){
         nombreGrupo.setEditable(true);
@@ -1352,30 +1379,22 @@ public class Ventana extends javax.swing.JFrame {
     public void borrarGrupo(){
         Boolean encontrado = false;
         for(int i  = 0; i < lugares.size();i++){
-            if(lugares.get(i).getGrupo().equals(grupos.get(jListGrupos.getSelectedIndex()).getNombre())){
+            if(lugares.get(i).getGrupo().getNombre().equals(grupos.get(jListGrupos.getSelectedIndex()).getNombre())){
                 encontrado = true;
             }
         }
         
         if(encontrado == false){ 
-            ConnectToBD conexion = new ConnectToBD();
             
-            try{
-
-               String query = " DELETE FROM Grupos WHERE id = " + grupos.get(jListGrupos.getSelectedIndex()).getId();
-
-               PreparedStatement preparedStmt = conexion.getConnector().prepareStatement(query);
- 
-               preparedStmt.execute();
-
-               conexion.getConnector().close();        
-
-           }
-           catch (Exception e){
-               System.out.println("Excepcion de feooooos en el borrar!" + e);
-           
+            t = s.beginTransaction();
             
-           }
+            Grupo grupo = (Grupo) s.get(Grupo.class, grupos.get(jListGrupos.getSelectedIndex()).getId());
+            if (grupo != null) {
+                s.delete(grupo);
+                System.out.println("eliminao");
+            }
+            t.commit();
+            
             grupos.remove(jListGrupos.getSelectedIndex());
             jComboBox2.removeItemAt(jListGrupos.getSelectedIndex());
         } else {
@@ -1399,7 +1418,7 @@ public class Ventana extends javax.swing.JFrame {
         horarioGrupo.setText(grupos.get(jListGrupos.getSelectedIndex()).getHorario());
         
         for(int j = 0; j < personas.size(); j++){
-            if(grupos.get(jListGrupos.getSelectedIndex()).getNombrePersona().equalsIgnoreCase(jComboBox3.getItemAt(j).toString())){  
+            if(grupos.get(jListGrupos.getSelectedIndex()).getPersona().getNombre().equalsIgnoreCase(jComboBox3.getItemAt(j).toString())){  
                 jComboBox3.setSelectedIndex(j);        
             }
         }
@@ -1407,8 +1426,10 @@ public class Ventana extends javax.swing.JFrame {
     
     public void guardarGrupo(){
         if(aniadirGrupoB == true){
-
-            this.crearNuevoGrupo( nombreGrupo.getText(), directorGrupo.getText(), Integer.parseInt(edadMinimaGrupo.getText()), horarioGrupo.getText(), jComboBox3.getItemAt(jComboBox3.getSelectedIndex()));
+            
+           Persona auxiliar = personas.get(jComboBox3.getSelectedIndex()); 
+           
+            this.crearNuevoGrupo( nombreGrupo.getText(), directorGrupo.getText(), Integer.parseInt(edadMinimaGrupo.getText()), horarioGrupo.getText(), auxiliar);
                                 
             jComboBox2.addItem(grupos.get(grupos.size() - 1).getNombre());
                     
@@ -1421,38 +1442,44 @@ public class Ventana extends javax.swing.JFrame {
         } else if(modificarGrupo == true){
           
             
+            
+            
             grupos.get(jListGrupos.getSelectedIndex()).setNombre(nombreGrupo.getText());
             grupos.get(jListGrupos.getSelectedIndex()).setNombreDirector(directorGrupo.getText());
             grupos.get(jListGrupos.getSelectedIndex()).setEdadMinima(Integer.parseInt(edadMinimaGrupo.getText()));
             grupos.get(jListGrupos.getSelectedIndex()).setHorario(horarioGrupo.getText());
             
-            grupos.get(jListGrupos.getSelectedIndex()).setNombrePersona(jComboBox3.getItemAt(jComboBox3.getSelectedIndex()));
             
+            
+            grupos.get(jListGrupos.getSelectedIndex()).setPersona(personas.get(jComboBox3.getSelectedIndex()));
+            
+            
+            s.close();
+            try { 
+            Session s1 = NewHibernateUtil.getSessionFactory().openSession();
+                t = s1.beginTransaction(); 
+                s1.update(grupos.get(jListGrupos.getSelectedIndex()));
+                t.commit();
+         
+                s1.close();
+            }catch (HibernateException e) { 
+                        e.printStackTrace(System.err); 
+                        if (t != null) { 
+                                t.rollback(); 
+                        }
+            }
+            
+            s = NewHibernateUtil.getSessionFactory().openSession();
+            
+            
+            
+            
+            
+                        
             jComboBox2.insertItemAt(grupos.get(jListGrupos.getSelectedIndex()).getNombre(), jListGrupos.getSelectedIndex());
             jComboBox2.removeItemAt(jListGrupos.getSelectedIndex() + 1);
             
-            ConnectToBD conexion = new ConnectToBD();
             
-            try{
-
-               String query = " UPDATE Grupos SET nombre = '" + String.valueOf(grupos.get(jListGrupos.getSelectedIndex()).getNombre()) 
-                       + "', nombreDirector = '" + grupos.get(jListGrupos.getSelectedIndex()).getNombreDirector()
-                       + "', edadMinima = " + grupos.get(jListGrupos.getSelectedIndex()).getEdadMinima() 
-                       + ", horario = '" + grupos.get(jListGrupos.getSelectedIndex()).getHorario()
-                       + "', nombrePersona = '" + grupos.get(jListGrupos.getSelectedIndex()).getNombrePersona()
-                       + "' WHERE id = " + grupos.get(jListGrupos.getSelectedIndex()).getId() ;
-
-               PreparedStatement preparedStmt = conexion.getConnector().prepareStatement(query);
-
-               
-               preparedStmt.execute();
-
-             conexion.getConnector().close();        
-
-           }
-           catch (Exception e){
-               System.out.println("Excepcion de feooooos en el modify!" + e);
-           }
             
             
             
@@ -1508,35 +1535,34 @@ public class Ventana extends javax.swing.JFrame {
     public void borrarLugar(){
         Boolean encontrado = false;
         for(int i  = 0; i < ciudades.size();i++){
-            if(ciudades.get(i).getLugar().equals(lugares.get(jListLugares.getSelectedIndex()).getNombre())){
+            if(ciudades.get(i).getLugar().getNombre().equals(lugares.get(jListLugares.getSelectedIndex()).getNombre())){
                 encontrado = true;
             }
         }
         
-        if(encontrado == false){ 
-            ConnectToBD conexion = new ConnectToBD();
+        System.out.println("encotnrado "+ encontrado);
+        
+        if(encontrado == false){
             
-            try{
-
-               String query = " DELETE FROM Lugares WHERE id = " + lugares.get(jListLugares.getSelectedIndex()).getId();
-
-               PreparedStatement preparedStmt = conexion.getConnector().prepareStatement(query);
- 
-               preparedStmt.execute();
-
-               conexion.getConnector().close();        
-
-           }
-           catch (Exception e){
-               System.out.println("Excepcion de feooooos en el borrar!" + e);
-           
+            t = s.beginTransaction();
             
-           }
+            Lugar lugar = (Lugar) s.get(Lugar.class, lugares.get(jListLugares.getSelectedIndex()).getId());
+            if (lugar != null) {
+                s.delete(lugar);
+                System.out.println("eliminao");
+            }
+            t.commit();
             lugares.remove(jListLugares.getSelectedIndex());
             jComboBox1.removeItemAt(jListLugares.getSelectedIndex());
+            
         } else {
             JOptionPane.showMessageDialog(null, "Este lugar tiene ciudades asociadas, primero elimina esas ciudades!");
+
         }
+            
+        
+        
+        
         
 
         nombreLugar.setText("");
@@ -1554,7 +1580,7 @@ public class Ventana extends javax.swing.JFrame {
         horarioLugar.setText(lugares.get(jListLugares.getSelectedIndex()).getHorario());
         
         for(int j = 0; j < grupos.size(); j++){
-            if(lugares.get(jListLugares.getSelectedIndex()).getGrupo().equalsIgnoreCase(jComboBox2.getItemAt(j).toString())){  
+            if(lugares.get(jListLugares.getSelectedIndex()).getGrupo().getNombre().equals(jComboBox2.getItemAt(j).toString())){  
                 jComboBox2.setSelectedIndex(j);        
             }
         }
@@ -1564,7 +1590,10 @@ public class Ventana extends javax.swing.JFrame {
         if(aniadirLugarB == true){
             
             
-            this.crearNuevoLugar(nombreLugar.getText(), direccionLugar.getText(), Integer.parseInt(numeroLugar.getText()), horarioLugar.getText(), jComboBox2.getItemAt(jComboBox2.getSelectedIndex()));
+           Grupo auxiliar = grupos.get(jComboBox2.getSelectedIndex()); 
+           
+    
+            this.crearNuevoLugar(nombreLugar.getText(), direccionLugar.getText(), Integer.parseInt(numeroLugar.getText()), horarioLugar.getText(), auxiliar);
                
             jComboBox1.addItem(lugares.get(lugares.size() - 1).getNombre());
             
@@ -1582,34 +1611,32 @@ public class Ventana extends javax.swing.JFrame {
             lugares.get(jListLugares.getSelectedIndex()).setDireccion(direccionLugar.getText());
             lugares.get(jListLugares.getSelectedIndex()).setNumeroEdif(Integer.parseInt(numeroLugar.getText()));
             lugares.get(jListLugares.getSelectedIndex()).setHorario(horarioLugar.getText());
+            lugares.get(jListLugares.getSelectedIndex()).setGrupo(grupos.get(jComboBox2.getSelectedIndex()));
             
-            lugares.get(jListLugares.getSelectedIndex()).setGrupo(jComboBox2.getItemAt(jComboBox2.getSelectedIndex()));
+            
+            s.close();
+            try { 
+                Session s1 = NewHibernateUtil.getSessionFactory().openSession();
+                t = s1.beginTransaction(); 
+                s1.update(lugares.get(jListLugares.getSelectedIndex()));
+                t.commit();
+         
+                s1.close();
+            }catch (HibernateException e) { 
+                        e.printStackTrace(System.err); 
+                        if (t != null) { 
+                                t.rollback(); 
+                        }
+            }
+            
+            s = NewHibernateUtil.getSessionFactory().openSession();
+            
+            
 
             jComboBox1.insertItemAt(lugares.get(jListLugares.getSelectedIndex()).getNombre(), jListLugares.getSelectedIndex());
             jComboBox1.removeItemAt(jListLugares.getSelectedIndex() + 1);
             
-            ConnectToBD conexion = new ConnectToBD();
             
-            try{
-
-               String query = " UPDATE Lugares SET nombre = '" + String.valueOf(lugares.get(jListLugares.getSelectedIndex()).getNombre()) 
-                       + "', direccion = '" + lugares.get(jListLugares.getSelectedIndex()).getDireccion()
-                       + "', numeroEdif = " + String.valueOf(lugares.get(jListLugares.getSelectedIndex()).getNumeroEdif())
-                       + ", horario = '" + lugares.get(jListLugares.getSelectedIndex()).getHorario()
-                       + "', grupo = '" + lugares.get(jListLugares.getSelectedIndex()).getGrupo()
-                       + "' WHERE id = " + lugares.get(jListLugares.getSelectedIndex()).getId() ;
-
-               PreparedStatement preparedStmt = conexion.getConnector().prepareStatement(query);
-
-               
-               preparedStmt.execute();
-
-             conexion.getConnector().close();        
-
-           }
-           catch (Exception e){
-               System.out.println("Excepcion de feooooos en el modify!" + e);
-           }
             
             
 
@@ -1664,24 +1691,18 @@ public class Ventana extends javax.swing.JFrame {
     
     public void borrarCiudad(){
         
-        ConnectToBD conexion = new ConnectToBD();
-            
-        try{
-
-           String query = " DELETE FROM Ciudades WHERE id = " + ciudades.get(jListCiudad.getSelectedIndex()).getId();
-
-           PreparedStatement preparedStmt = conexion.getConnector().prepareStatement(query);
-
-           preparedStmt.execute();
-
-           conexion.getConnector().close();        
-
-       }
-       catch (Exception e){
-           System.out.println("Excepcion de feooooos en el borrar!" + e);
-
-
-       }
+        t = s.beginTransaction();
+        
+        
+        Ciudad ciudad = (Ciudad) s.get(Ciudad.class, ciudades.get(jListCiudad.getSelectedIndex()).getId());
+        if (ciudad != null) {
+            s.delete(ciudad);
+            System.out.println("eliminao");
+        }
+        
+               
+        t.commit();
+        
         ciudades.remove(jListCiudad.getSelectedIndex());
 
         nombreCiudad.setText("");
@@ -1699,7 +1720,7 @@ public class Ventana extends javax.swing.JFrame {
         edificioCiudad.setText(ciudades.get(jListCiudad.getSelectedIndex()).getEdificioEmblematico());
         
         for(int j = 0; j < lugares.size(); j++){
-            if(ciudades.get(jListCiudad.getSelectedIndex()).getLugar().equalsIgnoreCase(jComboBox1.getItemAt(j).toString())){  
+            if(ciudades.get(jListCiudad.getSelectedIndex()).getLugar().getNombre().equals(jComboBox1.getItemAt(j).toString())){  
                 jComboBox1.setSelectedIndex(j);        
             }
         }
@@ -1707,8 +1728,16 @@ public class Ventana extends javax.swing.JFrame {
     
     public void guardarCiudad(){
          if(aniadirCiudadB == true){
+             
+             
+            
+           int contador = jComboBox1.getSelectedIndex();
+           System.out.println("COntador " + contador);
+           Lugar auxiliar = lugares.get(jComboBox1.getSelectedIndex()); 
+           
+           
 
-            this.crearNuevaCiudad(nombreCiudad.getText(), paisCiudad.getText(), provinciaCiudad.getText(), edificioCiudad.getText(), jComboBox1.getItemAt(jComboBox1.getSelectedIndex()));
+            this.crearNuevaCiudad(nombreCiudad.getText(), paisCiudad.getText(), provinciaCiudad.getText(), edificioCiudad.getText(), auxiliar);
  
             nombreCiudad.setEditable(false);
             paisCiudad.setEditable(false);
@@ -1721,30 +1750,25 @@ public class Ventana extends javax.swing.JFrame {
             ciudades.get(jListCiudad.getSelectedIndex()).setPais(paisCiudad.getText());
             ciudades.get(jListCiudad.getSelectedIndex()).setProvincia(provinciaCiudad.getText());
             ciudades.get(jListCiudad.getSelectedIndex()).setEdificioEmblematico(edificioCiudad.getText());
-            ciudades.get(jListCiudad.getSelectedIndex()).setLugar(jComboBox1.getItemAt(jComboBox1.getSelectedIndex()));
-
+            ciudades.get(jListCiudad.getSelectedIndex()).setLugar(lugares.get(jComboBox1.getSelectedIndex()));
             
-            ConnectToBD conexion = new ConnectToBD();
+            s.close();
+            try { 
+                Session s1 = NewHibernateUtil.getSessionFactory().openSession();
+                t = s1.beginTransaction(); 
+                s1.update(ciudades.get(jListCiudad.getSelectedIndex()));
+                t.commit();
+         
+                s1.close();
+            }catch (HibernateException e) { 
+                        e.printStackTrace(System.err); 
+                        if (t != null) { 
+                                t.rollback(); 
+                        }
+            }
             
-            try{
-
-               String query = " UPDATE Ciudades SET nombre = '" + String.valueOf(ciudades.get(jListCiudad.getSelectedIndex()).getNombre()) 
-                       + "', pais = '" + ciudades.get(jListCiudad.getSelectedIndex()).getPais()
-                       + "', provincia = " + String.valueOf(ciudades.get(jListCiudad.getSelectedIndex()).getProvincia())
-                       + ", edificioEmblematico = '" + ciudades.get(jListCiudad.getSelectedIndex()).getEdificioEmblematico()
-                       + "', lugar = '" + ciudades.get(jListCiudad.getSelectedIndex()).getLugar()
-                       + "' WHERE id = " + ciudades.get(jListCiudad.getSelectedIndex()).getId() ;
-
-               PreparedStatement preparedStmt = conexion.getConnector().prepareStatement(query);
-
-               
-               preparedStmt.execute();
-
-             conexion.getConnector().close();        
-
-           } catch (Exception e){
-               System.out.println("Excepcion de feooooos en el modify!" + e);
-           }
+            s = NewHibernateUtil.getSessionFactory().openSession();
+            
 
         }
 
@@ -1759,35 +1783,14 @@ public class Ventana extends javax.swing.JFrame {
         aniadirCiudad.setBackground(colorReset);
     }
     
-    public void crearNuevaCiudad(String nombre, String pais, String provincia, String edificioEmblematico, String lugar){
+    public void crearNuevaCiudad(String nombre, String pais, String provincia, String edificioEmblematico, Lugar lugar){
         idCiudades++;
-        ciudades.add(new Ciudad(nombre, pais, provincia, edificioEmblematico, idCiudades, lugar));
+        ciudades.add(new Ciudad(idCiudades, lugar, nombre, pais, provincia, edificioEmblematico));
         
-        ConnectToBD conexion = new ConnectToBD();
-
-                     
-        try{
-
-               String query = " insert into Ciudades (id, nombre, pais, provincia, edificioEmblematico, lugar)"
-               + " values (?, ?, ?, ?, ?, ?)";
-
-               PreparedStatement preparedStmt = conexion.getConnector().prepareStatement(query);
-
-               preparedStmt.setInt (1, idCiudades);
-               preparedStmt.setString (2, nombre);
-               preparedStmt.setString (3, pais);
-               preparedStmt.setString (4, provincia);
-               preparedStmt.setString (5, edificioEmblematico);
-               preparedStmt.setString (6, lugar);
-               
-               preparedStmt.execute();
-
-             conexion.getConnector().close();        
-
-           }
-           catch (Exception e){
-               System.out.println("Excepcion de feooooos!" + e);
-           }
+        t = s.beginTransaction(); 
+        s.saveOrUpdate(ciudades.get(ciudades.size() - 1));
+        
+        t.commit(); 
                 
     }
     
@@ -1799,36 +1802,14 @@ public class Ventana extends javax.swing.JFrame {
         return ciudades.get(index);
     }
     
-    public void crearNuevaPersona(String nombre, Double altura, Float peso, int edad) throws SQLException{
+    public void crearNuevaPersona(String nombre, Double altura, Double peso, int edad) throws SQLException{
         idPersonas++;
-        personas.add(new Persona(nombre, altura, peso, edad, idPersonas));
+        personas.add(new Persona(idPersonas, nombre, altura, peso, edad, null));
         
-        ConnectToBD conexion = new ConnectToBD();
+        t = s.beginTransaction(); 
+        s.saveOrUpdate(personas.get(personas.size() - 1));
         
-            try{
-
-               String query = " insert into Personas (id, nombre, altura, peso, edad)"
-               + " values (?, ?, ?, ?, ?)";
-
-               PreparedStatement preparedStmt = conexion.getConnector().prepareStatement(query);
-
-               preparedStmt.setInt (1, idPersonas);
-               preparedStmt.setString (2, nombre);
-               preparedStmt.setDouble(3, altura);
-               preparedStmt.setFloat (4, peso);
-               preparedStmt.setInt (5, edad);
-               
-
-               preparedStmt.execute();
-
-                
-
-           }
-           catch (Exception e){
-               System.out.println("Excepcion de feooooos!" + e);
-           }
-            
-        conexion.getConnector().close(); 
+        t.commit(); 
               
     }
     
@@ -1840,34 +1821,15 @@ public class Ventana extends javax.swing.JFrame {
         return personas.size();   
     }
     
-    public void crearNuevoGrupo(String nombreGrupo, String directorGrupo, int edadMinima, String horarioGrupo, String persona){
+    public void crearNuevoGrupo(String nombreGrupo, String directorGrupo, int edadMinima, String horarioGrupo, Persona persona){
         idGrupos++;
-        grupos.add(new Grupo(idGrupos, nombreGrupo, directorGrupo, edadMinima, horarioGrupo, persona));
+        grupos.add(new Grupo(idGrupos, persona, nombreGrupo, directorGrupo, edadMinima, horarioGrupo, null));
         
-        ConnectToBD conexion = new ConnectToBD();
+        t = s.beginTransaction(); 
+        s.saveOrUpdate(grupos.get(grupos.size() - 1));
         
-            try{
-
-               String query = " insert into Grupos (id, nombre, nombreDirector, edadMinima, horario, nombrePersona)"
-               + " values (?, ?, ?, ?, ?, ?)";
-
-               PreparedStatement preparedStmt = conexion.getConnector().prepareStatement(query);
-
-               preparedStmt.setInt (1, idGrupos);
-               preparedStmt.setString (2, nombreGrupo);
-               preparedStmt.setString (3, directorGrupo);
-               preparedStmt.setInt (4, edadMinima);
-               preparedStmt.setString (5, horarioGrupo);
-               preparedStmt.setString (6, persona);
-
-               preparedStmt.execute();
-
-             conexion.getConnector().close();        
-
-           }
-           catch (Exception e){
-               System.out.println("No ha sido posible insertar en la base de datos!" + e);
-           }
+        t.commit(); 
+        
 
     }
     
@@ -1879,34 +1841,14 @@ public class Ventana extends javax.swing.JFrame {
         return grupos.size();
     }
     
-    public void crearNuevoLugar(String nombre, String direccion, int numeroLugar, String horario, String grupo){
+    public void crearNuevoLugar(String nombre, String direccion, int numeroLugar, String horario, Grupo grupo){
         idLugares++;
-        lugares.add(new Lugar(idLugares, nombre, direccion, numeroLugar, horario, grupo));
+        lugares.add(new Lugar(idLugares, grupo, nombre, direccion, numeroLugar, horario, null));
         
-        ConnectToBD conexion = new ConnectToBD();
+        t = s.beginTransaction(); 
+        s.saveOrUpdate(lugares.get(lugares.size() - 1));
         
-            try{
-
-               String query = " insert into Lugares (id, nombre, direccion, numeroEdif, horario, grupo)"
-               + " values (?, ?, ?, ?, ?, ?)";
-
-               PreparedStatement preparedStmt = conexion.getConnector().prepareStatement(query);
-
-               preparedStmt.setInt (1, idLugares);
-               preparedStmt.setString (2, nombre);
-               preparedStmt.setString (3, direccion);
-               preparedStmt.setInt (4, numeroLugar);
-               preparedStmt.setString (5, horario);
-               preparedStmt.setString (6, grupo);
-
-               preparedStmt.execute();
-
-             conexion.getConnector().close();        
-
-           }
-           catch (Exception e){
-               System.out.println("No ha sido posible insertar en la base de datos!" + e);
-           }
+        t.commit(); 
     }
     
     public Lugar getLugar(int index){
@@ -1928,10 +1870,24 @@ public class Ventana extends javax.swing.JFrame {
     }
     
     private void inicializarIDs(){
-        idCiudades = ciudades.size();
-        idLugares = lugares.size();
-        idGrupos = grupos.size();
-        idPersonas = personas.size();
+        
+        if(ciudades.size() != 0){
+            idCiudades = ciudades.get(ciudades.size() - 1).getId();
+        }
+        
+        if(lugares.size() != 0){
+            idLugares = lugares.get(lugares.size() - 1).getId();
+        }
+        
+        if(grupos.size() != 0){
+            idGrupos = grupos.get(grupos.size() - 1).getId();
+        }
+        
+        
+        if(personas.size() != 0){
+            idPersonas = personas.get(personas.size() - 1).getId();
+        } 
+        
         
     }
     /**
@@ -1942,10 +1898,9 @@ public class Ventana extends javax.swing.JFrame {
         
         nuevaVentana.leerPersonas();
         nuevaVentana.leerGrupos();
-        nuevaVentana.leerCiudades();
-        
         nuevaVentana.leerLugares();
-        
+        nuevaVentana.leerCiudades();
+
         nuevaVentana.inicializarIDs();
         
         nuevaVentana.setVisible(true);

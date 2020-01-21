@@ -40,9 +40,9 @@ made subject to such option by the copyright holder.
 Contributor(s):
 -->
 <hibernate-reverse-engineering>
-  <schema-selection match-catalog="hibernate"/>
-  <table-filter match-name="Ciudades"/>
-  <table-filter match-name="Personas"/>
-  <table-filter match-name="Lugares"/>
-  <table-filter match-name="Grupos"/>
+  <schema-selection match-catalog="prueba1"/>
+  <table-filter match-name="ciudad"/>
+  <table-filter match-name="persona"/>
+  <table-filter match-name="grupo"/>
+  <table-filter match-name="lugar"/>
 </hibernate-reverse-engineering>

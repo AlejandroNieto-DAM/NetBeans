@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 13-ene-2020 14:19:35 by Hibernate Tools 4.3.1 -->
+<!-- Generated 17-ene-2020 14:20:42 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="sqlite.Ciudades" table="Ciudades" catalog="hibernate" optimistic-lock="version">
+    <class name="sqlite.Ciudad" table="ciudad" catalog="prueba1" optimistic-lock="version">
         <id name="id" type="int">
             <column name="id" />
             <generator class="assigned" />
         </id>
+        <many-to-one name="lugar" class="sqlite.Lugar" fetch="select">
+            <column name="lugarId" />
+        </many-to-one>
         <property name="nombre" type="string">
             <column name="nombre" length="50" />
         </property>
@@ -19,9 +22,6 @@
         </property>
         <property name="edificioEmblematico" type="string">
             <column name="edificioEmblematico" length="50" />
-        </property>
-        <property name="lugar" type="string">
-            <column name="lugar" length="50" />
         </property>
     </class>
 </hibernate-mapping>
