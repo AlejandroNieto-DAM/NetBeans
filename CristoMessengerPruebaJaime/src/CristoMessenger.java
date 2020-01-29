@@ -1,8 +1,4 @@
 
-import delete.Friend;
-import delete.User;
-import delete.User_Controller;
-import delete.Friend_Controller;
 import java.awt.Image;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
