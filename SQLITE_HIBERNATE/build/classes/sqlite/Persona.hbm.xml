@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-ene-2020 14:20:42 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="sqlite.Persona" table="persona" catalog="prueba1" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" />
+        </property>
+        <property name="altura" type="java.lang.Double">
+            <column name="altura" precision="22" scale="0" />
+        </property>
+        <property name="peso" type="java.lang.Double">
+            <column name="peso" precision="22" scale="0" />
+        </property>
+        <property name="edad" type="java.lang.Integer">
+            <column name="edad" />
+        </property>
+        <set name="grupos" table="grupo" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="personaId" />
+            </key>
+            <one-to-many class="sqlite.Grupo" />
+        </set>
+    </class>
+</hibernate-mapping>
