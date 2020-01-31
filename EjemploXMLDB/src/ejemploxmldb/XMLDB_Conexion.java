@@ -5,6 +5,10 @@
  */
 package ejemploxmldb;
 
+import javax.xml.xquery.XQConnection;
+import javax.xml.xquery.XQDataSource;
+import javax.xml.xquery.XQException;
+import javax.xml.xquery.XQMetaData;
 import org.xmldb.api.base.Collection; 
 import org.xmldb.api.base.Database; 
 import org.xmldb.api.base.Service; 
@@ -12,6 +16,23 @@ import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.DatabaseManager; 
 
 public class XMLDB_Conexion {
+    
+        public static String nomClaseDS = "net.xqj.exist.ExistXQDataSource";
+
+        private static XQConnection obtenConexion() throws ClassNotFoundException, InstantiationException, IllegalAccessException, XQException{
+            XQDataSource xqs = (XQDataSource) Class.forName(nomClaseDS).newInstance();
+            xqs.setProperty("serverName", "localhost");
+            xqs.setProperty("port", "8069");
+            xqs.setProperty("user", "admin");
+            xqs.setProperty("password", "");
+            return xqs.getConnection();
+        }
+
+        private static void muestraErrorQuery(XQException e){
+            System.err.println("XQuery ERROR mensaje: " + e.getMessage());
+            System.err.println("XQuery ERROR causa: " + e.getCause());
+            System.err.println("XQuery ERROR código: " + e.getVendorCode());
+        }
     
 	private static Collection obtenColeccion(String nomCol) throws Exception { 
 		Database dbDriver; 
@@ -21,9 +42,9 @@ public class XMLDB_Conexion {
 		col = DatabaseManager.getCollection("xmldb:exist://localhost:8080/exist/xmlrpc/db" + nomCol, "admin", ""); 
 		return col; 
 	} 
-
-	public static void main(String[] args) { 
-		Collection col = null;
+        
+        public void prueba1(){
+            Collection col = null;
 		try { 
 			col = obtenColeccion("/prueba1/ColeccionGimnasio/"); 
 			System.out.println("Colección actual: " + col.getName()); 
@@ -54,13 +75,37 @@ public class XMLDB_Conexion {
 		} 
 		finally { 
 			try { 
-				if (col != null) { 
-					col.close(); 
-			} 
-		} 
-		catch (XMLDBException e) { 
-			e.printStackTrace(); 
-		} 
-	} 
+                            if (col != null) { 
+                                    col.close(); 
+                            } 
+                        } 
+                        catch (XMLDBException e) { 
+                                e.printStackTrace(); 
+                        } 
+                }
+        }
+
+	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, XQException { 
+		XQConnection c = null;
+                try {
+                    c = obtenConexion();
+                    XQMetaData xqmd = c.getMetaData();
+                    System.out.println("Conexion establecida como: " + xqmd.getUserName() + ".");
+                    System.out.println("Transacciones: " + (xqmd.isTransactionSupported() ? "Si" : "No") + ".\n");
+                   
+                
+                } catch (XQException e) {
+                    muestraErrorQuery(e);
+                } catch (Exception e){
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (c != null){
+                            c.close();
+                        }
+                    } catch (XQException xe){
+                        xe.printStackTrace();
+                    }
+                }
 	} 
 }   

@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author alejandronieto
  */
-public class KKServer {
+public class KKServer extends Thread{
     
     int portNumber;
     boolean listening;
@@ -21,19 +21,21 @@ public class KKServer {
     ArrayList<KKMultiServerThread> conexiones;
     
     KKServer(int port){
+            super("KKServer");
             portNumber = port;
             listening = true;
             conexiones = new ArrayList();
     }
     
-    public void start(){
+    @Override
+    public void run(){
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) { 
             while (listening) {
 	            conexiones.add(new KKMultiServerThread(serverSocket.accept()));
                     CristoServer.debug("Conexion aceptada");
                     System.out.println("Conexion aceptada");
                     conexiones.get(conexiones.size() - 1).start();
-	        }
+                    	    }
         } catch (IOException e) {
             System.err.println("Could not listen on port " + portNumber);
             System.exit(-1);
