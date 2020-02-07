@@ -69,6 +69,7 @@ public class Ventana extends javax.swing.JFrame {
     private int idLugares;
     private int idCiudades;
     
+    private ExistXML exist;
     
    
     
@@ -78,6 +79,8 @@ public class Ventana extends javax.swing.JFrame {
      */
     public Ventana() throws IOException, FileNotFoundException, ClassNotFoundException {
         initComponents();
+        
+        exist = new ExistXML();
         
         personas = new ArrayList();
         ciudades = new ArrayList();
@@ -1146,13 +1149,55 @@ public class Ventana extends javax.swing.JFrame {
     }
 
     public void leerPersonas() throws FileNotFoundException, IOException, ClassNotFoundException, EOFException, SAXException{
-        XMLReader  procesadorXML = XMLReaderFactory.createXMLReader();
-	GestionContenidoPersonas gestor= new GestionContenidoPersonas();  
-        gestor.setArray(personas);
-	procesadorXML.setContentHandler(gestor);
- 	InputSource fileXML = new InputSource("Personas.xml");	    
-        procesadorXML.parse(fileXML);
         
+        String usuarios = exist.getXML();
+        
+        String nombre = "";
+        Float peso = 0f;
+        Double altura = 0.0;
+        int edad = 0;
+        int id = 0;
+        
+        int contadorAtt = 1;
+        usuarios = usuarios.substring(0, usuarios.length() - 1);
+        String[] attrs = usuarios.split("#");
+        
+        for(String text : attrs){
+            if(contadorAtt == 1){
+                id = Integer.parseInt(text);
+            }
+            
+            if(contadorAtt == 2){
+                nombre = text;
+            }
+            
+            if(contadorAtt == 3){
+                peso = Float.parseFloat(text);
+            }
+            
+            if(contadorAtt == 4){
+                altura = Double.parseDouble(text);
+            }
+            
+            if(contadorAtt == 5){
+                edad = Integer.parseInt(text);
+                
+                Persona person = new Persona(nombre, altura, peso, edad, id);
+                personas.add(person);
+                nombre = "";
+                altura = 0.0;
+                peso = 0f;
+                edad = 0;
+                id = 0;
+                contadorAtt = 0;
+            }
+            
+            
+            contadorAtt++;
+        }
+        
+        idPersonas = personas.get(personas.size() - 1).getId();
+            
         for(int i = 0; i < personas.size(); i++){
             jComboBox3.addItem(personas.get(i).getNombre());
         }
@@ -1253,6 +1298,8 @@ public class Ventana extends javax.swing.JFrame {
       transformer.transform(source, result);
 
      }catch(Exception e){ System.err.println("Error: "+e); }  
+       
+        
         
     }
     
@@ -1270,6 +1317,7 @@ public class Ventana extends javax.swing.JFrame {
         }
         
         this.jListRendererLugares();
+        
     }
     
     public void guardarCiudades() throws FileNotFoundException, IOException{
@@ -1323,10 +1371,10 @@ public class Ventana extends javax.swing.JFrame {
     }
     
     public void accionSalir() throws IOException{
-        this.guardarPersonas();
-        this.guardarGrupos();
-        this.guardarLugares();
-        this.guardarCiudades();
+        //this.guardarPersonas();
+        //this.guardarGrupos();
+        //this.guardarLugares();
+        //this.guardarCiudades();
         
         System.exit(0);
     }
@@ -1403,6 +1451,7 @@ public class Ventana extends javax.swing.JFrame {
         if(aniadirPersonaB == true){
 
             this.crearNuevaPersona(nombrePersona.getText(), Double.parseDouble(alturaPersona.getText()), Float.parseFloat(pesoPersona.getText()), Integer.parseInt(edadPersona.getText()));
+            
             jComboBox3.addItem(personas.get(personas.size() - 1).getNombre());
             
             nombrePersona.setEditable(false);
@@ -1416,6 +1465,13 @@ public class Ventana extends javax.swing.JFrame {
             personas.get(jListPersonas.getSelectedIndex()).setAltura(Double.parseDouble(alturaPersona.getText()));
             personas.get(jListPersonas.getSelectedIndex()).setPeso(Float.parseFloat(pesoPersona.getText()));
             personas.get(jListPersonas.getSelectedIndex()).setEdad(Integer.parseInt(edadPersona.getText()));
+            
+            exist.updateNombre(nombrePersona.getText(), 
+                    Double.parseDouble(alturaPersona.getText()),
+                    Float.parseFloat(pesoPersona.getText()), 
+                    Integer.parseInt(edadPersona.getText()), 
+                    personas.get(jListPersonas.getSelectedIndex()).getId());
+            
             
             
             jComboBox3.insertItemAt(personas.get(jListPersonas.getSelectedIndex()).getNombre(), jListPersonas.getSelectedIndex());
@@ -1762,6 +1818,10 @@ public class Ventana extends javax.swing.JFrame {
     public void crearNuevaPersona(String nombre, Double altura, Float peso, int edad){
         idPersonas++;
         personas.add(new Persona(nombre, altura, peso, edad, idPersonas));
+        
+        exist.insertarPersona(nombre, altura, peso, edad, idPersonas);
+        
+        
     }
     
     public Persona getPersona(int index){
@@ -1812,11 +1872,11 @@ public class Ventana extends javax.swing.JFrame {
     public static void main(String args[]) throws IOException, FileNotFoundException, ClassNotFoundException, SAXException {
         Ventana nuevaVentana = new Ventana();
         
-        nuevaVentana.leerPersonas();
-        nuevaVentana.leerGrupos();
-        nuevaVentana.leerCiudades();
         
-        nuevaVentana.leerLugares();
+        nuevaVentana.leerPersonas();
+        //nuevaVentana.leerGrupos();
+        //nuevaVentana.leerCiudades();
+        //nuevaVentana.leerLugares();
         
         nuevaVentana.setVisible(true);
    }

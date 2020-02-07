@@ -35,7 +35,7 @@ public class XQJ_consulta {
 		XQConnection c = null; 
 		try { 
 			c = obtenConexion(); 
-			String cad = "doc(\"//db/prueba2/Clientes.xml\")/clientes/cliente/apellidos"; 
+			String cad = "doc(\"//db/prueba2/Clientes.xml\")/clientes/cliente"; 
 			XQExpression xqe = c.createExpression(); 
 			XQResultSequence xqrs = xqe.executeQuery(cad); 
 			int i=1; 
