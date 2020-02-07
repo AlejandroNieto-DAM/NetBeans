@@ -37,18 +37,47 @@ public class ExistXML {
             System.err.println("XQuery ERROR código: " + e.getVendorCode());
         }
         
-        public void updateNombre(String nombre, Double altura, Float peso, int edad, int id){
+        public void deletePersona(int id){
+            String delete = "update delete doc(\"//db/EjercicioLuis/Personas.xml\")/personas/persona[id=\"" + id + "\"]";
+            
+            XQConnection c = null; 
+            try { 
+			c = obtenConexion(); 
+                        
+			XQExpression xqe = c.createExpression(); 
+			xqe.executeCommand(delete);
+			
+		} 
+		catch (XQException e) { 
+			muestraErrorXQuery(e);
+		} 
+		catch (Exception e) { 
+			e.printStackTrace(); 
+		} 
+		finally { 
+			try { 
+				if (c != null) { 
+					c.close(); 
+				} 
+			} 
+			catch (XQException xe) { 
+				xe.printStackTrace(); 
+			} 
+		} 
+        }
+        
+        public void update(String nombre, Double altura, Float peso, int edad, int id){
             String updateNombre = "update value doc(\"//db/EjercicioLuis/Personas.xml\")"
-                    + "/personas/persona[id=\"" + id + "\"]/nombre with \'" + nombre +" \'";
+                    + "/personas/persona[id=\"" + id + "\"]/nombre with \'" + nombre +"\'";
             
             String updatePeso = "update value doc(\"//db/EjercicioLuis/Personas.xml\")"
-                    + "/personas/persona[id=\"" + id + "\"]/peso with \'" + peso +" \'";
+                    + "/personas/persona[id=\"" + id + "\"]/peso with \'" + peso +"\'";
             
             String updateAltura = "update value doc(\"//db/EjercicioLuis/Personas.xml\")"
-                    + "/personas/persona[id=\"" + id + "\"]/altura with \'" + altura +" \'";
+                    + "/personas/persona[id=\"" + id + "\"]/altura with \'" + altura +"\'";
             
             String updateEdad = "update value doc(\"//db/EjercicioLuis/Personas.xml\")"
-                    + "/personas/persona[id=\"" + id + "\"]/edad with \'" + edad +" \'";
+                    + "/personas/persona[id=\"" + id + "\"]/edad with \'" + edad +"\'";
             
             XQConnection c = null; 
             try { 

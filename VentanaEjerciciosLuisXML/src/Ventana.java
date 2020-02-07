@@ -1428,6 +1428,7 @@ public class Ventana extends javax.swing.JFrame {
 
         if(encontrado == false){
             //System.out.println("entrooo");
+            exist.deletePersona(personas.get(jListPersonas.getSelectedIndex()).getId());
             personas.remove(jListPersonas.getSelectedIndex());
             jComboBox3.removeItemAt(jListPersonas.getSelectedIndex());
         }
@@ -1466,7 +1467,7 @@ public class Ventana extends javax.swing.JFrame {
             personas.get(jListPersonas.getSelectedIndex()).setPeso(Float.parseFloat(pesoPersona.getText()));
             personas.get(jListPersonas.getSelectedIndex()).setEdad(Integer.parseInt(edadPersona.getText()));
             
-            exist.updateNombre(nombrePersona.getText(), 
+            exist.update(nombrePersona.getText(), 
                     Double.parseDouble(alturaPersona.getText()),
                     Float.parseFloat(pesoPersona.getText()), 
                     Integer.parseInt(edadPersona.getText()), 

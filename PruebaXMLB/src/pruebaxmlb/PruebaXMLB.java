@@ -57,7 +57,7 @@ public class PruebaXMLB {
                         
                          // update value //fname[. = "Andrew"] with 'Andy'
                          
-                         String update = "update value doc(\"//db/EjercicioLuis/Personas.xml\")/personas/persona[id=\"2\"]/nombre with \'pene\'";
+                         String update = "update delete doc(\"//db/EjercicioLuis/Personas.xml\")/personas/persona[id=\"2\"]";
                         
                         String cad = "doc(\"//db/EjercicioLuis/Personas.xml\")/personas/persona"; 
                         
