@@ -1151,58 +1151,66 @@ public class Ventana extends javax.swing.JFrame {
     public void leerPersonas() throws FileNotFoundException, IOException, ClassNotFoundException, EOFException, SAXException{
         
         String usuarios = exist.getXML();
-        
-        String nombre = "";
-        Float peso = 0f;
-        Double altura = 0.0;
-        int edad = 0;
-        int id = 0;
-        
-        int contadorAtt = 1;
-        usuarios = usuarios.substring(0, usuarios.length() - 1);
-        String[] attrs = usuarios.split("#");
-        
-        for(String text : attrs){
-            if(contadorAtt == 1){
-                id = Integer.parseInt(text);
+       
+        try{
+            
+           String nombre = "";
+            Float peso = 0f;
+            Double altura = 0.0;
+            int edad = 0;
+            int id = 0;
+
+            int contadorAtt = 1;
+            usuarios = usuarios.substring(0, usuarios.length() - 1);
+            String[] attrs = usuarios.split("#");
+
+            for(String text : attrs){
+                if(contadorAtt == 1){
+                    id = Integer.parseInt(text);
+                }
+
+                if(contadorAtt == 2){
+                    nombre = text;
+                }
+
+                if(contadorAtt == 3){
+                    peso = Float.parseFloat(text);
+                }
+
+                if(contadorAtt == 4){
+                    altura = Double.parseDouble(text);
+                }
+
+                if(contadorAtt == 5){
+                    edad = Integer.parseInt(text);
+
+                    Persona person = new Persona(nombre, altura, peso, edad, id);
+                    personas.add(person);
+                    nombre = "";
+                    altura = 0.0;
+                    peso = 0f;
+                    edad = 0;
+                    id = 0;
+                    contadorAtt = 0;
+                }
+
+
+                contadorAtt++;
             }
-            
-            if(contadorAtt == 2){
-                nombre = text;
+            idPersonas = personas.get(personas.size() - 1).getId();
+
+            for(int i = 0; i < personas.size(); i++){
+                jComboBox3.addItem(personas.get(i).getNombre());
             }
-            
-            if(contadorAtt == 3){
-                peso = Float.parseFloat(text);
-            }
-            
-            if(contadorAtt == 4){
-                altura = Double.parseDouble(text);
-            }
-            
-            if(contadorAtt == 5){
-                edad = Integer.parseInt(text);
-                
-                Persona person = new Persona(nombre, altura, peso, edad, id);
-                personas.add(person);
-                nombre = "";
-                altura = 0.0;
-                peso = 0f;
-                edad = 0;
-                id = 0;
-                contadorAtt = 0;
-            }
-            
-            
-            contadorAtt++;
+
+            this.jListRendererPersonas();
+        } catch (StringIndexOutOfBoundsException e){
+           
         }
         
-        idPersonas = personas.get(personas.size() - 1).getId();
-            
-        for(int i = 0; i < personas.size(); i++){
-            jComboBox3.addItem(personas.get(i).getNombre());
-        }
         
-        this.jListRendererPersonas();
+        
+        
     }
     
     public void guardarGrupos() throws FileNotFoundException, IOException{
