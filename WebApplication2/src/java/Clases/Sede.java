@@ -17,6 +17,7 @@ public class Sede  implements java.io.Serializable {
      private Set proyectoSedes = new HashSet(0);
 
     public Sede() {
+        nomSede = "";
     }
 
 	

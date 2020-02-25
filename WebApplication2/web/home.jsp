@@ -16,10 +16,11 @@
             <table border="1">
                 <tr><td colspan="2" align="centre">Sedes[<a href="javascript:void(0)" onclick="javascript:document.
                             frm_muestra_sede.op.value = 'altaSede';document.frm_muestra_sede.
-                            submit();">Nueva York</a>]</td></tr>
+                            submit();">Nueva Sede</a>]</td></tr>
                 <% Session s = Clases.NewHibernateUtil.getInstance().getSessionFactory().openSession();
                 try{
                     Query q = s.createQuery("FROM Sede ORDER BY nomSede, idSede").setReadOnly(true);
+                    
                     List<Clases.Sede> listaSedes = (List<Clases.Sede>) q.list();
                     if(listaSedes.isEmpty()){%>
                         <tr><td colspan = "2">No existen sedes</td></tr>
@@ -32,6 +33,11 @@
                                         onclick="javascript:document.
                                         frm_muestra_sede.idSede.value = '<%=unaSede.getIdSede()%>';
                                 document.frm_muestra_sede.submit();"><%=unaSede.getNomSede()%></a></td>
+                                <td><a href="javascript:void(0)" 
+                                        onclick="javascript:document.
+                                        frm_muestra_sede.op.value = 'borrarSede';
+                                        javascript:document.frm_muestra_sede.idSede.value = '<%=unaSede.getIdSede()%>';
+                                        document.frm_muestra_sede.submit();"> Eliminar Sede </a></td>
                             </tr>
                             <%
                         }

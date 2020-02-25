@@ -1,11 +1,14 @@
 
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.RequestDispatcher;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public class controlador extends HttpServlet {
 
@@ -26,6 +29,7 @@ public class controlador extends HttpServlet {
         if (oper == null) {
             oper = "";
         }
+        
 
         RequestDispatcher rd;
 
@@ -40,6 +44,20 @@ public class controlador extends HttpServlet {
             case "muestraSede":
                 rd = request.getRequestDispatcher("muestraSede.jsp");
                 rd.forward(request, response);
+                break;
+            case "borrarSede":
+                int idSede = Integer.parseInt(request.getParameter("idSede"));
+                
+                Clases.Sede sedeABorrar = new Clases.Sede("");
+                sedeABorrar.setIdSede(idSede);
+                
+                Session s2 = Clases.NewHibernateUtil.getInstance().getSessionFactory().openSession();
+                s2.beginTransaction();
+                s2.delete(sedeABorrar);
+                s2.getTransaction().commit();
+                s2.close();
+                
+                response.sendRedirect("home.jsp");
                 break;
             default:
                 response.sendRedirect("home.jsp");
